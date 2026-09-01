@@ -1,36 +1,65 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Trip Vetted
 
-## Getting Started
+Real Experiences. Trusted Advice.
 
-First, run the development server:
+An invite-only travel network where every recommendation is attached to a
+person you actually know. Members log trips as stamps; trip planning
+assembles briefs from the stamps of friends who have been there, with every
+line attributed. The full product definition is in `BUILD-SPEC.md`.
+
+## Running locally in five minutes
+
+Prerequisites: Node 20+, Docker running.
 
 ```bash
+git clone <repo-url> && cd trip-vetted
+npm install
+
+# Start the local Supabase stack (applies migrations and seed data)
+npx supabase start
+
+# Create your env file from the values supabase start printed
+cp .env.example .env.local
+# Fill in NEXT_PUBLIC_SUPABASE_ANON_KEY and SUPABASE_SERVICE_ROLE_KEY
+# from that output. The URL is http://127.0.0.1:54331 (note: this repo
+# uses ports 54330-54339 to avoid colliding with other local projects).
+
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000. The marketing site is at `/`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+To try the member flow: go to `/join`, use the seeded invite code
+`TV-DEMOFRIEND`, enter any email, then open the magic link from the local
+mail catcher at http://127.0.0.1:54334.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Seeded demo members (see `supabase/seed.sql`): maya, jonah, priya, sam,
+all `@demo.tripvetted.local`, password `demo-password` (used by tests;
+the app itself signs in by magic link only).
 
-## Learn More
+## Commands
 
-To learn more about Next.js, take a look at the following resources:
+| Command             | What it does                                    |
+| ------------------- | ----------------------------------------------- |
+| `npm run dev`       | Dev server on :3000                             |
+| `npm run build`     | Production build                                |
+| `npm run typecheck` | TypeScript, no emit                             |
+| `npm run lint`      | ESLint                                          |
+| `npm test`          | Full test suite (needs local Supabase running)  |
+| `npm run test:rls`  | Just the row-level security suite               |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Where things live
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+src/content/site.ts        every user-facing word, edit copy here
+src/app/                   routes (marketing, join, login, onboarding, home, people)
+src/features/<feature>/    components and server actions, grouped by feature
+src/lib/supabase/          client/server/middleware Supabase helpers
+supabase/migrations/       schema, RLS policies, functions
+supabase/seed.sql          local demo data, clearly fictional
+tests/rls/                 proof that the security policies hold
+docs/                      ARCHITECTURE, OPERATIONS, ROADMAP, decisions/
+```
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Read `ARCHITECTURE.md` before touching the database or auth.
+Read `CLAUDE.md` for the working rules that govern this repo.
