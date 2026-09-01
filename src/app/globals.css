@@ -17,7 +17,7 @@
   /* Ink */
   --color-ink: #211d16;          /* primary text */
   --color-ink-soft: #5b5344;     /* secondary text, AA on paper */
-  --color-ink-faint: #857a63;    /* metadata, AA large text only */
+  --color-ink-faint: #6a624c;   /* metadata, placeholders, AA on all grounds */
 
   /* The one accent: stamp-pad red */
   --color-stamp: #96351e;        /* links, marks, primary actions */
