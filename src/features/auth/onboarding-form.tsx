@@ -7,9 +7,9 @@ import { onboarding } from "@/content/site";
 const initial: OnboardingState = { status: "idle", message: "" };
 
 const field =
-  "mt-2 w-full border-2 border-ink bg-paper-raised px-4 py-3 text-sm";
+  "mt-2 w-full rounded-xl border border-line-strong bg-surface px-4 py-3 text-sm";
 const label =
-  "block font-mono text-xs uppercase tracking-wider text-ink-soft";
+  "block text-xs font-medium uppercase tracking-wider text-ink-soft";
 
 export function OnboardingForm({ hasPendingCode }: { hasPendingCode: boolean }) {
   const [state, action, pending] = useActionState(completeOnboarding, initial);
@@ -40,13 +40,13 @@ export function OnboardingForm({ hasPendingCode }: { hasPendingCode: boolean }) 
         <label htmlFor="ob-tags" className={label}>{onboarding.tagsLabel}</label>
         <p className="mt-1 text-sm text-ink-faint">{onboarding.tagsSub}</p>
         <input id="ob-tags" name="tasteTags" placeholder={onboarding.tagsPlaceholder}
-          className={`${field} font-mono`} />
+          className={field} />
       </div>
       <div>
         <label htmlFor="ob-avatar" className={label}>{onboarding.avatarLabel}</label>
         <p className="mt-1 text-sm text-ink-faint">{onboarding.avatarSub}</p>
         <input id="ob-avatar" name="avatar" type="file" accept="image/*"
-          className="mt-2 w-full text-sm file:mr-4 file:border-2 file:border-ink file:bg-paper-raised file:px-4 file:py-2 file:font-mono file:text-xs file:uppercase" />
+          className="mt-2 w-full text-sm file:mr-4 file:rounded-full file:border file:border-ink file:bg-surface file:px-4 file:py-2 file:text-xs file:font-medium file:uppercase" />
       </div>
       <div>
         <label htmlFor="ob-bio" className={label}>{onboarding.bioLabel}</label>
@@ -54,7 +54,7 @@ export function OnboardingForm({ hasPendingCode }: { hasPendingCode: boolean }) 
           placeholder={onboarding.bioPlaceholder} className={field} />
       </div>
       <button type="submit" disabled={pending}
-        className="w-full border-2 border-stamp bg-stamp px-6 py-3 font-mono text-sm font-medium uppercase tracking-wider text-paper-raised hover:border-stamp-deep hover:bg-stamp-deep disabled:opacity-60">
+        className="w-full rounded-full bg-accent px-6 py-3 text-sm font-semibold text-white hover:bg-accent-deep disabled:opacity-60">
         {pending ? "…" : onboarding.button}
       </button>
       {state.status === "error" && (

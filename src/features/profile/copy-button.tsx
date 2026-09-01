@@ -18,7 +18,7 @@ export function CopyButton({ text }: { text: string }) {
           // Clipboard unavailable; the code is on screen to copy by hand.
         }
       }}
-      className="border-2 border-ink px-3 py-1 font-mono text-xs uppercase tracking-wider hover:bg-ink hover:text-paper"
+      className="rounded-full border border-ink px-3 py-1 text-xs font-medium uppercase tracking-wider hover:bg-ink hover:text-white"
     >
       {copied ? home.copiedNote : home.copyButton}
     </button>

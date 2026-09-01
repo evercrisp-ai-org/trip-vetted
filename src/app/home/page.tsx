@@ -66,14 +66,14 @@ export default async function HomePage() {
             <h1 className="font-display text-3xl tracking-tight">
               {home.welcomePrefix} {me.display_name}
             </h1>
-            <p className="mt-1 font-mono text-xs uppercase tracking-wider text-ink-soft">
+            <p className="mt-1 text-xs font-medium uppercase tracking-wider text-ink-soft">
               {home.memberSincePrefix}{" "}
               {new Date(me.created_at).toLocaleDateString("en-US", {
                 month: "short",
                 year: "numeric",
               })}
               {" · "}
-              <Link href={`/people/${me.id}`} className="text-stamp underline underline-offset-2">
+              <Link href={`/people/${me.id}`} className="text-accent underline underline-offset-2">
                 {home.viewProfile}
               </Link>
             </p>
@@ -81,7 +81,7 @@ export default async function HomePage() {
         </div>
 
         <section aria-labelledby="circle-heading" className="mt-12">
-          <h2 id="circle-heading" className="border-b-2 border-ink pb-2 font-display text-xl">
+          <h2 id="circle-heading" className="border-b border-line pb-2 font-display text-xl">
             {home.circleTitle}
           </h2>
           {circle.length === 0 ? (
@@ -92,18 +92,18 @@ export default async function HomePage() {
                 <li key={p.id}>
                   <Link
                     href={`/people/${p.id}`}
-                    className="flex items-center gap-4 py-4 hover:bg-paper-raised"
+                    className="flex items-center gap-4 py-4 hover:bg-surface"
                   >
                     <Avatar name={p.display_name} url={p.avatar_url} />
                     <span className="flex-1">
                       <span className="block font-medium">{p.display_name}</span>
                       {p.home_city && (
-                        <span className="block font-mono text-xs uppercase tracking-wider text-ink-faint">
+                        <span className="block text-xs font-medium uppercase tracking-wider text-ink-faint">
                           {p.home_city}
                         </span>
                       )}
                     </span>
-                    <span aria-hidden="true" className="font-mono text-ink-faint">
+                    <span aria-hidden="true" className="text-ink-faint">
                       →
                     </span>
                   </Link>
@@ -114,7 +114,7 @@ export default async function HomePage() {
         </section>
 
         <section aria-labelledby="invites-heading" className="mt-12">
-          <div className="flex flex-wrap items-end justify-between gap-3 border-b-2 border-ink pb-2">
+          <div className="flex flex-wrap items-end justify-between gap-3 border-b border-line pb-2">
             <div>
               <h2 id="invites-heading" className="font-display text-xl">
                 {home.invitesTitle}
@@ -123,7 +123,7 @@ export default async function HomePage() {
             <form action={createInvite}>
               <button
                 type="submit"
-                className="border-2 border-stamp bg-stamp px-4 py-2 font-mono text-xs font-medium uppercase tracking-wider text-paper-raised hover:border-stamp-deep hover:bg-stamp-deep"
+                className="rounded-full bg-accent px-4 py-2 text-xs font-semibold uppercase tracking-wider text-white hover:bg-accent-deep"
               >
                 {home.newInviteButton}
               </button>
@@ -141,13 +141,13 @@ export default async function HomePage() {
               return (
                 <li
                   key={inv.id}
-                  className="flex flex-wrap items-center gap-3 border-2 border-line-strong bg-paper-raised px-4 py-3"
+                  className="flex flex-wrap items-center gap-3 rounded-xl border border-line bg-surface px-4 py-3"
                 >
                   <code className={`font-mono text-sm ${open ? "" : "text-ink-faint line-through"}`}>
                     {inv.code}
                   </code>
                   <span
-                    className={`font-mono text-[11px] uppercase tracking-[0.2em] ${
+                    className={`text-[11px] font-medium uppercase tracking-[0.2em] ${
                       open ? "text-ok" : "text-ink-faint"
                     }`}
                   >
@@ -160,7 +160,7 @@ export default async function HomePage() {
                         <input type="hidden" name="inviteId" value={inv.id} />
                         <button
                           type="submit"
-                          className="border-2 border-line-strong px-3 py-1 font-mono text-xs uppercase tracking-wider text-ink-soft hover:border-error hover:text-error"
+                          className="rounded-full border border-line-strong px-3 py-1 text-xs font-medium uppercase tracking-wider text-ink-soft hover:border-error hover:text-error"
                         >
                           {home.revokeButton}
                         </button>

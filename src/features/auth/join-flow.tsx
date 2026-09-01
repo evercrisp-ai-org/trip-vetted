@@ -40,7 +40,7 @@ export function JoinFlow() {
 
   if (state.status === "sent") {
     return (
-      <p role="status" className="border-2 border-ok px-4 py-3 text-sm text-ok">
+      <p role="status" className="rounded-xl border border-ok bg-surface px-4 py-3 text-sm text-ok">
         {state.message}
       </p>
     );
@@ -49,12 +49,12 @@ export function JoinFlow() {
   if (inviterName !== null) {
     return (
       <form action={action} className="space-y-4">
-        <p className="border-2 border-ok px-4 py-3 font-mono text-sm text-ok">
+        <p className="rounded-xl border border-ok bg-surface px-4 py-3 text-sm text-ok">
           {join.invitedByPrefix} {inviterName}
         </p>
         <input type="hidden" name="inviteCode" value={code.trim().toUpperCase()} />
         <div>
-          <label htmlFor="join-email" className="block font-mono text-xs uppercase tracking-wider text-ink-soft">
+          <label htmlFor="join-email" className="block text-xs font-medium uppercase tracking-wider text-ink-soft">
             {join.emailLabel}
           </label>
           <p className="mt-1 text-sm text-ink-faint">{join.emailSub}</p>
@@ -64,13 +64,13 @@ export function JoinFlow() {
             type="email"
             required
             autoComplete="email"
-            className="mt-2 w-full border-2 border-ink bg-paper-raised px-4 py-3 font-mono text-sm"
+            className="mt-2 w-full rounded-xl border border-line-strong bg-surface px-4 py-3 text-sm"
           />
         </div>
         <button
           type="submit"
           disabled={pending}
-          className="w-full border-2 border-stamp bg-stamp px-6 py-3 font-mono text-sm font-medium uppercase tracking-wider text-paper-raised hover:border-stamp-deep hover:bg-stamp-deep disabled:opacity-60"
+          className="w-full rounded-full bg-accent px-6 py-3 text-sm font-semibold text-white hover:bg-accent-deep disabled:opacity-60"
         >
           {pending ? "…" : join.emailButton}
         </button>
@@ -84,7 +84,7 @@ export function JoinFlow() {
   return (
     <form onSubmit={checkCode} className="space-y-4">
       <div>
-        <label htmlFor="join-code" className="block font-mono text-xs uppercase tracking-wider text-ink-soft">
+        <label htmlFor="join-code" className="block text-xs font-medium uppercase tracking-wider text-ink-soft">
           {join.codeLabel}
         </label>
         <input
@@ -96,13 +96,13 @@ export function JoinFlow() {
           autoCapitalize="characters"
           spellCheck={false}
           placeholder={join.codePlaceholder}
-          className="mt-2 w-full border-2 border-ink bg-paper-raised px-4 py-3 font-mono text-sm uppercase placeholder:text-ink-faint"
+          className="mt-2 w-full rounded-xl border border-line-strong bg-surface px-4 py-3 font-mono text-sm uppercase placeholder:text-ink-faint"
         />
       </div>
       <button
         type="submit"
         disabled={checking}
-        className="w-full border-2 border-ink px-6 py-3 font-mono text-sm uppercase tracking-wider hover:bg-ink hover:text-paper disabled:opacity-60"
+        className="w-full rounded-full border border-ink px-6 py-3 text-sm font-medium uppercase tracking-wider hover:bg-ink hover:text-white disabled:opacity-60"
       >
         {checking ? "…" : join.codeButton}
       </button>

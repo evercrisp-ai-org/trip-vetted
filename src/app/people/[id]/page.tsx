@@ -49,7 +49,7 @@ export default async function ProfilePage({
       <main id="content" className="mx-auto max-w-3xl px-5 py-10">
         <Link
           href="/home"
-          className="font-mono text-xs uppercase tracking-wider text-ink-soft hover:text-ink"
+          className="text-xs font-medium uppercase tracking-wider text-ink-soft hover:text-ink"
         >
           ← {profilePage.backToCircle}
         </Link>
@@ -58,7 +58,7 @@ export default async function ProfilePage({
           <Avatar name={profile.display_name} url={profile.avatar_url} size="h-20 w-20 text-3xl" />
           <div>
             <h1 className="font-display text-3xl tracking-tight">{profile.display_name}</h1>
-            <p className="mt-2 font-mono text-xs uppercase tracking-[0.2em] text-stamp">
+            <p className="mt-2 text-xs font-medium uppercase tracking-[0.2em] text-accent">
               {profile.invited_by && inviter ? (
                 <>
                   {profilePage.invitedByPrefix}{" "}
@@ -70,7 +70,7 @@ export default async function ProfilePage({
                 profilePage.foundingMember
               )}
             </p>
-            <p className="mt-1 font-mono text-xs uppercase tracking-wider text-ink-faint">
+            <p className="mt-1 text-xs font-medium uppercase tracking-wider text-ink-faint">
               {profilePage.memberSincePrefix}{" "}
               {new Date(profile.created_at).toLocaleDateString("en-US", {
                 month: "short",
@@ -84,23 +84,23 @@ export default async function ProfilePage({
 
         <dl className="mt-8 grid gap-6 sm:grid-cols-2">
           {profile.home_city && (
-            <div className="border-t-2 border-ink pt-3">
-              <dt className="font-mono text-xs uppercase tracking-[0.2em] text-ink-faint">
+            <div className="border-t border-line pt-3">
+              <dt className="text-xs font-medium uppercase tracking-[0.2em] text-ink-faint">
                 {profilePage.homeCityLabel}
               </dt>
               <dd className="mt-1 font-display text-lg">{profile.home_city}</dd>
             </div>
           )}
           {profile.taste_tags?.length > 0 && (
-            <div className="border-t-2 border-ink pt-3">
-              <dt className="font-mono text-xs uppercase tracking-[0.2em] text-ink-faint">
+            <div className="border-t border-line pt-3">
+              <dt className="text-xs font-medium uppercase tracking-[0.2em] text-ink-faint">
                 {profilePage.tagsLabel}
               </dt>
               <dd className="mt-2 flex flex-wrap gap-2">
                 {profile.taste_tags.map((tag: string) => (
                   <span
                     key={tag}
-                    className="border border-stamp bg-stamp-wash px-2 py-0.5 font-mono text-xs text-stamp-deep"
+                    className="rounded-full bg-accent-wash px-2.5 py-0.5 text-xs font-medium text-accent-deep"
                   >
                     {tag}
                   </span>
@@ -113,7 +113,7 @@ export default async function ProfilePage({
         <section aria-labelledby="invited-heading" className="mt-12">
           <h2
             id="invited-heading"
-            className="border-b-2 border-ink pb-2 font-display text-xl"
+            className="border-b border-line pb-2 font-display text-xl"
           >
             {profilePage.invitedListTitle}
           </h2>
@@ -125,11 +125,11 @@ export default async function ProfilePage({
                 <li key={p.id}>
                   <Link
                     href={`/people/${p.id}`}
-                    className="flex items-center gap-3 py-3 hover:bg-paper-raised"
+                    className="flex items-center gap-3 py-3 hover:bg-surface"
                   >
                     <span className="flex-1 font-medium">{p.display_name}</span>
                     {p.home_city && (
-                      <span className="font-mono text-xs uppercase tracking-wider text-ink-faint">
+                      <span className="text-xs font-medium uppercase tracking-wider text-ink-faint">
                         {p.home_city}
                       </span>
                     )}

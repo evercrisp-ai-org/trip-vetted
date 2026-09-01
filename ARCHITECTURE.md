@@ -100,8 +100,15 @@ Magic link only, via `@supabase/ssr` cookies.
 - All user-facing copy is in `src/content/site.ts`. Never hardcode a string
   in a component. The owner edits that one file.
 - Design tokens are defined once in `src/app/globals.css` under `@theme`
-  and consumed as Tailwind utilities (`bg-paper`, `text-ink`, `border-stamp`).
-  Do not introduce raw hex values in components.
+  and consumed as Tailwind utilities (`bg-ground`, `text-ink`,
+  `bg-accent`, `bg-night`). Do not introduce raw hex values in
+  components. The direction (cinematic marketing site, quiet app) and
+  the measured contrast ratios live in docs/decisions/0005.
+- Marketing imagery goes through the `Photo` component and IMAGERY.md:
+  files land in `public/images/`, absent files render a branded
+  placeholder, and no image slot may carry text without a scrim measured
+  for AA (worst-case math in ADR 0005). No AI-generated human faces,
+  ever.
 - Accessibility is not optional: focus-visible styles are global, forms
   have real labels, feedback uses `role="status"` / `role="alert"`, and
   reduced motion is respected globally.

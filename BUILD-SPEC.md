@@ -106,16 +106,59 @@ handover page for the owner. Walkthrough recording script. Access removed.
 
 ## 7. Design direction
 
-Keep the name, the tagline, and the passport/stamp vocabulary. Rebuild the visual execution.
+Revised 2026-09-01 after Dave supplied six UI references (Voyare, three Foxico frames,
+Malvora, tourex). These decisions supersede the original section 7 entirely. The earlier
+"ink on paper, warm paper ground" direction is withdrawn.
 
-The stamp is the atomic unit of the product and should feel like a physical object: ink-on-paper
-credential, warm paper ground, one ink accent, monospace for dates and coordinates the way a passport
-page sets them, restrained editorial typography, generous space. Photography large, interface chrome
-quiet. Deliberately avoid the default travel-startup look (soft gradient hero, rounded cards in a
-three-across grid, stock wanderlust imagery). If it could be any travel app, it is wrong.
+**Scope.** The photo-forward cinematic treatment applies to the MARKETING SITE ONLY. The
+logged-in app (feed, stamps, briefs, hub) is quieter, denser, and content-first. A tool used
+weekly has different needs than a page seen once, and the app must never depend on a perfect
+hero photograph, because its real content is members' phone photos.
 
-Accessibility is part of the design, not a later pass: WCAG AA contrast, real focus states, keyboard
-paths through every flow, respects reduced motion.
+**Structure.** Dark cinematic photographic hero, then a light ground for everything below
+(the tourex and Malvora pattern). Glass nav floating over the hero. Generous rounded corners.
+Horizontal card rails for grouped content. Soft depth, cards may overlap section boundaries.
+
+**Palette.** Ocean teal through deep blue as the accent range, taken from Voyare and Foxico.
+Light neutral ground for the body. Near-black text. One accent, used with restraint.
+
+**Type.** Geometric sans for headlines (Outfit or equivalent), at large sizes with tight
+leading. A readable text face for body. Monospace survives ONLY for stamp dates and
+coordinates, where it does real work.
+
+**The stamp motif.** Kept at the component level, not as the site's skin. The site looks
+modern and photographic; an individual stamp renders as a real credential object, dated and
+signed and ink-marked. The metaphor lives where the product's meaning is. Trip Vetted is
+named around this vocabulary, so it must be visible somewhere concrete.
+
+**Hero behavior.** One static cinematic image. No slider, no carousel pagination, no
+background video. Nothing to maintain and correct on every device.
+
+**Imagery.** AI-generated, per Dave's decision. Two hard constraints:
+- NO AI-generated human faces anywhere. Not as member avatars, not in testimonials. This
+  product's entire claim is that these are real people you know, and a synthetic face is the
+  one tell that would poison it. Use initials, monograms, or abstract treatments until real
+  members exist.
+- Every image slot is documented in `IMAGERY.md` with its exact generation prompt, aspect
+  ratio, and target filename, and every slot has a branded placeholder fallback (teal
+  gradient with grain) so the site is never broken while images are missing. Dropping in a
+  generated file must require zero code changes.
+
+**Do not import from the references:** they are all travel agencies selling trips to
+strangers, so their heroes carry booking furniture (Book Now, destination, check-in,
+check-out, guests, Reserve). Trip Vetted sells and books nothing. Reproducing that furniture
+would misrepresent the product on sight.
+
+**Contrast is not optional.** Look closely at the Voyare reference: its body paragraph sits
+on the plane's fuselage and is barely readable. Every text-over-photograph pass needs a scrim
+or gradient sufficient for WCAG AA at that text's size. Get the look without the flaw.
+
+**Resilience to real photographs (applies to the app).** Fixed aspect ratios, object-fit
+cover, skeleton or blur placeholders while loading. Every photographic layout must still look
+deliberate when fed one badly-cropped, badly-lit phone photo, because it will be.
+
+Accessibility remains part of the design, not a later pass: WCAG AA contrast, real focus
+states, keyboard paths through every flow, respects reduced motion.
 
 ## 8. Handover doctrine
 

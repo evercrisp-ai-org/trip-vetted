@@ -22,6 +22,8 @@ export const nav = {
 
 export const hero = {
   kicker: "Invite-only travel network",
+  imageAlt:
+    "A coastal town at dusk seen from above, lights coming on along the waterfront",
   headline: "Travel advice from people who know you,",
   headlineEmphasis: "not ten thousand strangers.",
   sub: "Trip Vetted is a private circle where every recommendation is signed by a friend who was actually there. No review scores from the crowd. No listicles. Just your people, and where they would send you.",
@@ -31,6 +33,8 @@ export const hero = {
 
 export const circle = {
   kicker: "Your travel circle",
+  imageAlt:
+    "A table covered with an open map, film photos, a passport, and handwritten notes",
   headline: "Five friends who travel well beat five thousand reviews.",
   body: "You already trust certain people about where to eat and where to stay. Trip Vetted makes that trust usable. Your circle is built one invitation at a time, and you can always see who brought anyone in. If a tip shows up in your plans, you know exactly whose taste it reflects.",
   points: [
@@ -90,6 +94,47 @@ export const stampsAndBriefs = {
     "Every line in a brief is cited back to the stamp it came from. Nothing is invented to fill space.",
 };
 
+export const destinations = {
+  kicker: "From the passport",
+  headline: "Places your circle has already vetted.",
+  sub: "Every card below traces back to a member's stamp: dated, signed, and specific.",
+  railLabel: "Vetted destinations",
+  items: [
+    {
+      name: "Tokyo",
+      country: "Japan",
+      coords: "35.6762 N, 139.6503 E",
+      note: "Jonah's standing-sushi mornings and yakitori alleys",
+      image: "dest-tokyo.jpg",
+      alt: "A narrow Tokyo alley at night lit by paper lanterns and neon signs",
+    },
+    {
+      name: "Kyoto",
+      country: "Japan",
+      coords: "35.0116 N, 135.7681 E",
+      note: "Priya's 6am shrine walks, before anyone else wakes",
+      image: "dest-kyoto.jpg",
+      alt: "Red torii gates on a forested path in early morning light, empty of people",
+    },
+    {
+      name: "Lisbon",
+      country: "Portugal",
+      coords: "38.7223 N, 9.1393 W",
+      note: "Maya's tasca where the owner chooses your dinner",
+      image: "dest-lisbon.jpg",
+      alt: "Steep Lisbon street with tiled facades and a yellow tram in the distance",
+    },
+    {
+      name: "Oaxaca",
+      country: "Mexico",
+      coords: "17.0732 N, 96.7266 W",
+      note: "Sam's road-trip notes from the valley palenques",
+      image: "dest-oaxaca.jpg",
+      alt: "Agave fields under a dramatic sky outside Oaxaca, mountains behind",
+    },
+  ],
+};
+
 export const privacy = {
   kicker: "Privacy and trust",
   headline: "Built private, because it has to be.",
@@ -115,6 +160,7 @@ export const privacy = {
 
 export const waitlist = {
   headline: "No invite yet?",
+  imageAlt: "A dark coastline at night with a lighthouse beam over the water",
   body: "Leave your email. When your corner of the network opens up, or a member vouches for you, this is how we reach you.",
   placeholder: "you@example.com",
   button: "Join the waitlist",

@@ -1,16 +1,16 @@
 import type { Metadata } from "next";
-import { Fraunces, Archivo, IBM_Plex_Mono } from "next/font/google";
+import { Outfit, Inter, IBM_Plex_Mono } from "next/font/google";
 import { site, chrome } from "@/content/site";
 import "./globals.css";
 
-const fraunces = Fraunces({
-  variable: "--font-fraunces",
+// next/font downloads at build time and self-hosts; no font CDN at runtime.
+const outfit = Outfit({
+  variable: "--font-outfit",
   subsets: ["latin"],
-  axes: ["opsz"],
 });
 
-const archivo = Archivo({
-  variable: "--font-archivo",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
 });
 
@@ -34,11 +34,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${fraunces.variable} ${archivo.variable} ${plexMono.variable} antialiased`}
+        className={`${outfit.variable} ${inter.variable} ${plexMono.variable} antialiased`}
       >
         <a
           href="#content"
-          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:bg-stamp focus:px-4 focus:py-2 focus:text-paper"
+          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-full focus:bg-accent focus:px-4 focus:py-2 focus:text-white"
         >
           {chrome.skipToContent}
         </a>

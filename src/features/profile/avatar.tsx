@@ -15,14 +15,14 @@ export function Avatar({
       <img
         src={url}
         alt=""
-        className={`${size} shrink-0 border-2 border-ink object-cover`}
+        className={`${size} shrink-0 rounded-full border border-line object-cover`}
       />
     );
   }
   return (
     <span
       aria-hidden="true"
-      className={`${size} flex shrink-0 items-center justify-center border-2 border-ink bg-paper-sunk font-display`}
+      className={`${size} flex shrink-0 items-center justify-center rounded-xl border border-line-strong bg-surface-sunk font-display`}
     >
       {name.charAt(0).toUpperCase()}
     </span>

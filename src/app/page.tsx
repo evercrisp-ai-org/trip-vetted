@@ -3,6 +3,7 @@ import {
   Hero,
   Circle,
   HowItWorks,
+  DestinationsRail,
   StampsAndBriefs,
   Privacy,
   Waitlist,
@@ -17,6 +18,7 @@ export default function MarketingPage() {
         <Hero />
         <Circle />
         <HowItWorks />
+        <DestinationsRail />
         <StampsAndBriefs />
         <Privacy />
         <Waitlist />
