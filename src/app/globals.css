@@ -1,26 +1,70 @@
 @import "tailwindcss";
 
+/*
+ * Trip Vetted design tokens. Defined once, used everywhere.
+ * Direction (BUILD-SPEC section 7): ink on paper. A stamp is a physical
+ * credential: warm paper ground, one ink accent, monospace for dates and
+ * coordinates, sharp corners, generous space. Not a gradient in sight.
+ */
+@theme {
+  /* Ground */
+  --color-paper: #f5efe2;        /* warm paper, the page ground */
+  --color-paper-raised: #fbf7ee; /* cards, form fields */
+  --color-paper-sunk: #ece3d0;   /* wells, code blocks */
+  --color-line: #d5c9b0;         /* hairline rules */
+  --color-line-strong: #b3a482;  /* emphasized rules, borders */
+
+  /* Ink */
+  --color-ink: #211d16;          /* primary text */
+  --color-ink-soft: #5b5344;     /* secondary text, AA on paper */
+  --color-ink-faint: #857a63;    /* metadata, AA large text only */
+
+  /* The one accent: stamp-pad red */
+  --color-stamp: #96351e;        /* links, marks, primary actions */
+  --color-stamp-deep: #752910;   /* hover, pressed */
+  --color-stamp-wash: #f0dcd2;   /* accent tint for chips and marks */
+
+  /* States */
+  --color-ok: #3d5a3c;
+  --color-error: #8a2a12;
+
+  /* Type */
+  --font-display: var(--font-fraunces), "Iowan Old Style", Georgia, serif;
+  --font-sans: var(--font-archivo), "Helvetica Neue", Arial, sans-serif;
+  --font-mono: var(--font-plex-mono), "SF Mono", Menlo, monospace;
+
+  /* Shape: passport pages are not rounded cards */
+  --radius-hairline: 2px;
+  --radius-plate: 4px;
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  color-scheme: light;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--color-stamp);
+  color: var(--color-paper);
+}
+
+/* Focus: visible, high contrast, never removed */
+:focus-visible {
+  outline: 2px solid var(--color-stamp);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
