@@ -54,9 +54,14 @@ from auth.users u
 where u.email like '%@demo.tripvetted.local';
 
 -- ---------------------------------------------------------------------------
--- Founding member (no inviter; created by the operator, documented in OPERATIONS.md)
+-- Members and the invitation chain.
+-- Ordering matters: a profile must exist before any invite names it as
+-- inviter, and an invite must be redeemed (accepted_by set) before the
+-- invitee's profile is inserted so the connection trigger fires.
 -- ---------------------------------------------------------------------------
 
+-- Maya: founding member, no inviter (created by the operator in production,
+-- documented in OPERATIONS.md).
 insert into public.profiles (id, display_name, home_city, taste_tags, bio, invited_by)
 values (
   '11111111-1111-4111-8111-111111111111', 'Maya Tan', 'Lisbon',
@@ -65,20 +70,15 @@ values (
   null
 );
 
--- ---------------------------------------------------------------------------
--- Invitation chain: redeemed invites, then profiles (trigger builds connections)
--- ---------------------------------------------------------------------------
-
-insert into public.invites (id, inviter_id, code, accepted_by, accepted_at)
+-- Maya's invites: two for the chain below, one left open for you to redeem.
+insert into public.invites (id, inviter_id, code)
 values
-  ('aaaaaaaa-0000-4000-8000-00000000000a', '11111111-1111-4111-8111-111111111111',
-   'TV-SEEDJONAH', null, null),
-  ('aaaaaaaa-0000-4000-8000-00000000000b', '11111111-1111-4111-8111-111111111111',
-   'TV-SEEDPRIYA', null, null),
-  ('aaaaaaaa-0000-4000-8000-00000000000c', '22222222-2222-4222-8222-222222222222',
-   'TV-SEEDSAM', null, null);
+  ('aaaaaaaa-0000-4000-8000-00000000000a', '11111111-1111-4111-8111-111111111111', 'TV-SEEDJONAH'),
+  ('aaaaaaaa-0000-4000-8000-00000000000b', '11111111-1111-4111-8111-111111111111', 'TV-SEEDPRIYA');
+insert into public.invites (inviter_id, code)
+values ('11111111-1111-4111-8111-111111111111', 'TV-DEMOFRIEND');
 
--- Jonah and Priya redeem Maya's invites.
+-- Jonah redeems Maya's invite, then his profile lands.
 update public.invites set accepted_by = '22222222-2222-4222-8222-222222222222', accepted_at = now()
   where code = 'TV-SEEDJONAH';
 insert into public.profiles (id, display_name, home_city, taste_tags, bio, invited_by)
@@ -87,6 +87,7 @@ values ('22222222-2222-4222-8222-222222222222', 'Jonah Reyes', 'Mexico City',
         'If the menu is laminated, I am already gone.',
         '11111111-1111-4111-8111-111111111111');
 
+-- Priya redeems Maya's other invite.
 update public.invites set accepted_by = '33333333-3333-4333-8333-333333333333', accepted_at = now()
   where code = 'TV-SEEDPRIYA';
 insert into public.profiles (id, display_name, home_city, taste_tags, bio, invited_by)
@@ -95,7 +96,14 @@ values ('33333333-3333-4333-8333-333333333333', 'Priya Nair', 'London',
         'Plans the museum route before booking the flight.',
         '11111111-1111-4111-8111-111111111111');
 
--- Sam redeems Jonah's invite (second link in the chain).
+-- Priya's open demo code (only valid now that her profile exists).
+insert into public.invites (inviter_id, code)
+values ('33333333-3333-4333-8333-333333333333', 'TV-DEMOCIRCLE');
+
+-- Jonah invites Sam: second link in the chain. Jonah's profile exists, so he
+-- can be an inviter; Sam redeems before his own profile is inserted.
+insert into public.invites (id, inviter_id, code)
+values ('aaaaaaaa-0000-4000-8000-00000000000c', '22222222-2222-4222-8222-222222222222', 'TV-SEEDSAM');
 update public.invites set accepted_by = '44444444-4444-4444-8444-444444444444', accepted_at = now()
   where code = 'TV-SEEDSAM';
 insert into public.profiles (id, display_name, home_city, taste_tags, bio, invited_by)
@@ -103,12 +111,6 @@ values ('44444444-4444-4444-8444-444444444444', 'Sam Whitfield', 'Austin',
         array['hiking', 'bbq', 'road-trips'],
         'Will drive four hours for brisket and call it a day trip.',
         '22222222-2222-4222-8222-222222222222');
-
--- Open invite codes for testing the signup flow yourself.
-insert into public.invites (inviter_id, code)
-values
-  ('11111111-1111-4111-8111-111111111111', 'TV-DEMOFRIEND'),
-  ('33333333-3333-4333-8333-333333333333', 'TV-DEMOCIRCLE');
 
 -- ---------------------------------------------------------------------------
 -- Places

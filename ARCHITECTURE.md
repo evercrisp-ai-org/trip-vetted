@@ -61,7 +61,9 @@ You cannot become a member without a valid invite, enforced in Postgres:
    inviter's display name.
 2. After the magic link lands, onboarding calls `redeem_invite(code)`,
    which marks the invite `accepted_by = auth.uid()` inside the database.
-   Revoked and used codes are rejected there, not in JavaScript.
+   Revoked and used codes are rejected there, not in JavaScript. Note that
+   `accepted_by` references auth.users, not profiles: redemption happens
+   before the profile exists.
 3. The `profiles` INSERT policy refuses any row unless a redeemed invite
    exists for the caller and `invited_by` equals that invite's inviter.
    You cannot join uninvited and you cannot lie about who invited you.
@@ -83,7 +85,10 @@ Magic link only, via `@supabase/ssr` cookies.
   parked in an httpOnly cookie for onboarding.
 - `/login`: email, magic link, for existing members.
 - `/auth/confirm`: verifies the one-time token, then routes to `/home`
-  (profile exists) or `/onboarding` (fresh account).
+  (profile exists) or `/onboarding` (fresh account). This is the token_hash
+  flow: the auth email templates (supabase/templates/, wired in
+  config.toml, mirrored in the hosted dashboard) link straight to this
+  route. Default Supabase templates will not work with it.
 - `src/middleware.ts` refreshes the session cookie and fences `/home`,
   `/people`, `/onboarding`. Pages re-check server-side; the middleware is
   the outer fence, not the only one.

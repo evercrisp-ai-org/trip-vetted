@@ -27,11 +27,15 @@ When they exist, record project names and dashboard URLs here.
 4. In Supabase Auth settings: set the site URL to the production domain,
    add it to redirect URLs, and configure an SMTP provider for magic links
    (the built-in mailer is rate-limited to a trickle).
-5. Create the Vercel project from the GitHub repo. Set env vars from
+5. Set the auth email templates. The app's /auth/confirm route uses the
+   token_hash flow, so the "Magic Link" and "Confirm signup" templates must
+   link to {SiteURL}/auth/confirm?token_hash={{ .TokenHash }}&type=email.
+   Copy the bodies from supabase/templates/ into the dashboard.
+6. Create the Vercel project from the GitHub repo. Set env vars from
    `.env.example`: the two NEXT_PUBLIC Supabase values and
    NEXT_PUBLIC_SITE_URL. The service role key is NOT needed by the app;
    never set it in Vercel.
-6. Deploy. CI must be green first.
+7. Deploy. CI must be green first.
 
 ## Monthly cost
 

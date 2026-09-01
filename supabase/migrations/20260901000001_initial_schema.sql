@@ -31,7 +31,10 @@ create table public.invites (
   inviter_id uuid not null references public.profiles (id) on delete cascade,
   code text not null unique,
   email_hash text,
-  accepted_by uuid references public.profiles (id),
+  -- References auth.users, not profiles: redemption happens during
+  -- onboarding, before the profile row exists. The profiles insert policy
+  -- then requires this redeemed invite.
+  accepted_by uuid references auth.users (id),
   accepted_at timestamptz,
   revoked_at timestamptz,
   created_at timestamptz not null default now()

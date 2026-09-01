@@ -25,8 +25,11 @@ jobs:
       - name: Lint
         run: npm run lint
 
-      - name: Start local Supabase (migrations + seed)
+      - name: Start local Supabase (applies migrations and seed; fails the build if either breaks)
         run: npx supabase start
+
+      - name: Prove a from-scratch reset works (migrations + seed again)
+        run: npx supabase db reset
 
       - name: Write test env
         run: |

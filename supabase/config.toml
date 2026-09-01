@@ -411,3 +411,15 @@ enabled = true
 # declarative_schema_path = "./schemas"
 # JSON string passed through to pg-delta SQL formatting.
 # format_options = "{\"keywordCase\":\"upper\",\"indent\":2,\"maxWidth\":80,\"commaStyle\":\"trailing\"}"
+
+# Custom templates: the app's /auth/confirm route uses the token_hash flow,
+# so links must point at the site, not at the GoTrue verify endpoint.
+# The hosted project needs the same templates (see OPERATIONS.md).
+[auth.email.template.magic_link]
+subject = "Your Trip Vetted sign-in link"
+content_path = "./supabase/templates/magic-link.html"
+
+[auth.email.template.confirmation]
+subject = "Confirm your email to join Trip Vetted"
+content_path = "./supabase/templates/confirmation.html"
+
