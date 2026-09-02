@@ -30,12 +30,16 @@ const plexMono = IBM_Plex_Mono({
 
 /*
  * metadataBase makes the generated social-card URL absolute, which Slack,
- * iMessage and Twitter all require. Set NEXT_PUBLIC_SITE_URL in the hosting
- * environment; the localhost fallback only keeps local builds quiet.
+ * iMessage and Twitter all require. Set NEXT_PUBLIC_SITE_URL once there is
+ * a real domain; on Vercel the project's production URL is used meanwhile,
+ * and the localhost fallback only keeps local builds quiet.
  */
 export const metadata: Metadata = {
   metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"
+    process.env.NEXT_PUBLIC_SITE_URL ??
+      (process.env.VERCEL_PROJECT_PRODUCTION_URL
+        ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+        : "http://localhost:3000")
   ),
   title: {
     default: `${site.name}: ${site.tagline}`,
