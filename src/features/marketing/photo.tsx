@@ -53,30 +53,6 @@ export function Photo({
   );
 }
 
-/**
- * The blurred, enlarged copy of a photograph that sits behind the hero's
- * inset frame, so the page bleeds the hero's own colour to the window edge
- * instead of a flat band. Decorative: never announced to screen readers.
- *
- * Absent file means no backdrop at all. The hero's night ground shows
- * through, which is the correct fallback.
- */
-export function PhotoBackdrop({ file }: { file: string }) {
-  if (!hasFile(file)) return null;
-
-  return (
-    <div aria-hidden="true" className="hero-backdrop">
-      <Image
-        src={`/images/${file}`}
-        alt=""
-        fill
-        sizes="100vw"
-        priority
-        className="object-cover"
-      />
-    </div>
-  );
-}
 
 function hasFile(file: string) {
   return fs.existsSync(path.join(process.cwd(), "public", "images", file));

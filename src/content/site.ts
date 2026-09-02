@@ -35,6 +35,89 @@ export const hero = {
   scrollCue: "See how it works",
 };
 
+export const heroStream = {
+  kicker: "Invite-only travel network",
+  headline: "Travel advice from people who know you.",
+  sub: "Every recommendation on Trip Vetted is a stamp: a real trip, logged by a friend who was actually there. No crowd scores. No listicles. Just your people, and where they would send you.",
+  primaryCta: "Join the waitlist",
+  secondaryCta: "I have an invite code",
+  streamLabel: "Stamps from members, streaming out of the centre",
+  /*
+   * The stamps that ride the corridor. Nine are on each rail at once, so the
+   * first nine here are what shows; extras rotate in if `cards` is raised.
+   * Quotes are the "loved" line of a stamp and must stay short: they are read
+   * off a card in motion, in the two seconds before it leaves the frame.
+   */
+  stamps: [
+    {
+      image: "stream/tokyo-vending-night.jpg",
+      place: "Tokyo",
+      who: "Jonah R.",
+      quote: "Hot can coffee from a machine at 1am. Better than it has any right to be.",
+    },
+    {
+      image: "stream/yokohama-chinatown.jpg",
+      place: "Yokohama",
+      who: "Priya N.",
+      quote: "Go after dark, when the lanterns are on and the tour groups are gone.",
+    },
+    {
+      image: "stream/food-thali.jpg",
+      place: "Delhi",
+      who: "Priya N.",
+      quote: "Order the naan last so it arrives hot. Non-negotiable.",
+    },
+    {
+      image: "stream/bangkok-popart-market.jpg",
+      place: "Bangkok",
+      who: "Sam O.",
+      quote: "The print stall at the back. Bargain, but not hard.",
+    },
+    {
+      image: "stream/nyc-bodega.jpg",
+      place: "New York",
+      who: "Jonah R.",
+      quote: "Bacon egg and cheese, salt pepper ketchup. Say it exactly like that.",
+    },
+    {
+      image: "stream/food-biryani.jpg",
+      place: "Delhi",
+      who: "Jonah R.",
+      quote: "Biryani at lunch, never dinner. It sells out by two.",
+    },
+    {
+      image: "stream/bangkok-striped-wall.jpg",
+      place: "Bangkok",
+      who: "Maya T.",
+      quote: "Walk the side streets at 4pm when the shutters are half down.",
+    },
+    {
+      image: "stream/nyc-graffiti-wall.jpg",
+      place: "New York",
+      who: "Priya N.",
+      quote: "Skip the museum queue. The walls out here are better anyway.",
+    },
+    {
+      image: "stream/food-rasmalai.jpg",
+      place: "Delhi",
+      who: "Maya T.",
+      quote: "Rasmalai, cold, standing up at the counter. Do not sit down.",
+    },
+    {
+      image: "stream/nyc-umbrellas.jpg",
+      place: "New York",
+      who: "Maya T.",
+      quote: "Times Square in a downpour is the only time it is worth it.",
+    },
+    {
+      image: "stream/nyc-broadway-rain.jpg",
+      place: "New York",
+      who: "Sam O.",
+      quote: "Rain empties the avenues. Best photographs I took all week.",
+    },
+  ],
+};
+
 export const circle = {
   image: "nyc-umbrellas.jpg",
   kicker: "Your travel circle",

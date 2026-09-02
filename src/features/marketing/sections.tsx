@@ -3,7 +3,7 @@ import type { CSSProperties } from "react";
 import {
   site,
   nav,
-  hero,
+  heroStream,
   circle,
   howItWorks,
   stampArc,
@@ -13,7 +13,8 @@ import {
   waitlist,
   footer,
 } from "@/content/site";
-import { Photo, PhotoBackdrop } from "./photo";
+import { Photo } from "./photo";
+import { StampStream } from "./stamp-stream";
 import { StampSpecimen } from "./stamp-specimen";
 import { WaitlistForm } from "./waitlist-form";
 
@@ -21,12 +22,12 @@ import { WaitlistForm } from "./waitlist-form";
  * Scrim discipline (BUILD-SPEC section 7): every text-over-photograph pass
  * sits on a night overlay measured for WCAG AA against a worst-case pure
  * white pixel underneath. Floors used here:
- *   hero: base night/45 (keeps the photograph alive) plus a bottom gradient
- *     to night/90. Every text zone in the frame sits inside that gradient,
- *     where the composited floor is >= night/67: white >= 6.08:1 and
- *     accent-wash >= 4.97:1. The base alone is NOT sufficient, so any new
- *     text added to the hero must stay inside the gradient or carry its own.
- *   nav pill and kicker pill carry their own night wash on top: >= 7.9:1
+ *   hero: no base wash, so the stamps stay vivid. Contrast comes from a
+ *     radial fog at the vanishing point plus top and bottom bands; the
+ *     header and the calls to action both sit where those composite to at
+ *     least night/80 against a worst-case white card (white >= 9:1). Text
+ *     added to the hero must sit inside a band or carry its own wash.
+ *   nav pill, kicker pill and secondary button carry their own night wash
  *   white on --color-accent -> 6.05:1 (waitlist band, no photograph)
  * Arc tiles and hub answers caption on the light ground, so they need no
  * scrim at all. Numbers in docs/decisions/0005-cinematic-redesign.md.
@@ -92,94 +93,101 @@ export function SiteNav() {
 }
 
 /**
- * The hero: a blurred copy of the photograph bleeds to the window edge and
- * the sharp frame is inset on top of it, with the nav pill, a three-line
- * headline, and the supporting paragraph inside the frame.
+ * The hero: a centred header over a corridor of stamps that stream out of
+ * the vanishing point toward the viewer. Each card is a real stamp (photo,
+ * author, one line of advice), so the motion itself explains the product.
+ *
+ * Contrast is carried by three scrims, not by dimming the cards: a radial
+ * fog at the vanishing point (which also reads as depth), a top band under
+ * the header, and a bottom band under the calls to action. Where the header
+ * sits the composited floor is about night/83 against a worst-case white
+ * card (white 10:1); under the calls to action it is at least night/72
+ * (white 7.5:1). The fog alone is deliberately too light to carry text. The cards at the frame edges stay vivid.
  */
 export function Hero() {
   return (
     <section className="on-night relative isolate bg-night p-2 sm:p-4 lg:p-6">
-      <PhotoBackdrop file={hero.image} />
-      <div aria-hidden="true" className="absolute inset-0 bg-night/45" />
-
       <div className="relative flex min-h-[calc(100svh-1rem)] flex-col overflow-hidden rounded-[1.5rem] bg-night sm:min-h-[calc(100svh-2rem)] sm:rounded-[2rem]">
-        <Photo
-          file={hero.image}
-          alt={hero.imageAlt}
-          sizes="100vw"
-          priority
-          position="50% 58%"
+        {/* Two corridors, one per breakpoint. The geometry is in container
+            width units, so on a phone the desktop path is a thin strip in a
+            tall frame. The small-screen path grows cards taller and holds
+            the rails tighter so the band fills the space between header and
+            buttons. display:none stops the hidden one from animating. */}
+        <StampStream
+          stamps={heroStream.stamps}
+          cards={9}
+          speed={26}
+          axis={58}
+          className="absolute inset-0 hidden lg:block"
         />
-        {/* Base wash. Deliberately light so the photograph reads. */}
-        <div aria-hidden="true" className="absolute inset-0 bg-night/45" />
-        {/* The gradient that actually carries contrast. Full height on small
-            screens, where content starts much higher up the frame. */}
+        <StampStream
+          stamps={heroStream.stamps}
+          // The tallest a card gets on screen is set by when its inner edge
+          // crosses the frame, which railExit controls: solving
+          // (rail - cardWidth/2) * f = 50 gives f, and height is 25f. Rails
+          // at 26 let a card reach ~73cqw before it leaves; the default 44
+          // caps it at ~36cqw, a thin strip on a phone. exitHeight over 11
+          // cards keeps the per-card growth ratio at the default 1.39, so
+          // the ribbon stays solid.
+          cards={11}
+          speed={24}
+          axis={48}
+          path={{ exitHeight: 95, railExit: 26 }}
+          className="absolute inset-0 lg:hidden"
+        />
+
+        {/* Fog at the vanishing point. */}
         <div
           aria-hidden="true"
-          className="absolute inset-x-0 bottom-0 h-full bg-gradient-to-t from-night/90 via-night/55 to-transparent lg:h-3/4"
+          className="absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(ellipse 62% 58% at 50% 54%, rgba(7,24,32,0.62) 0%, rgba(7,24,32,0.42) 30%, rgba(7,24,32,0.18) 60%, rgba(7,24,32,0) 80%)",
+          }}
+        />
+        {/* Header band. */}
+        <div
+          aria-hidden="true"
+          className="absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-night/95 via-night/65 to-transparent"
+        />
+        {/* Call-to-action band. */}
+        <div
+          aria-hidden="true"
+          className="absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-night/95 via-night/70 to-transparent"
         />
 
         <div className="relative flex flex-1 flex-col p-3 pb-6 sm:p-5 sm:pb-8 lg:p-7 lg:pb-10">
           <SiteNav />
 
-          <div className="mt-auto grid gap-8 pt-28 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] lg:items-end lg:gap-14">
-            <div>
-              <p className="inline-flex w-fit items-center rounded-full border border-white/40 bg-night/40 px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.25em] text-white backdrop-blur-sm">
-                {hero.kicker}
-              </p>
-              <h1 className="mt-6 font-display text-[2.6rem] font-semibold leading-[1.02] tracking-tight text-white sm:text-5xl lg:text-6xl">
-                {hero.lines.map((line, i) => (
-                  <span key={line} className="block">
-                    {i === hero.lines.length - 1 ? (
-                      <span className="text-accent-wash">{line}</span>
-                    ) : (
-                      line
-                    )}
-                  </span>
-                ))}
-              </h1>
-            </div>
+          <div className="mx-auto mt-10 max-w-3xl text-center sm:mt-14 lg:mt-16">
+            <p className="inline-flex items-center rounded-full border border-white/40 bg-night/40 px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.25em] text-white backdrop-blur-sm">
+              {heroStream.kicker}
+            </p>
+            <h1 className="mt-6 text-balance font-display text-4xl font-semibold leading-[1.04] tracking-tight text-white sm:text-5xl lg:text-6xl">
+              {heroStream.headline}
+            </h1>
+          </div>
 
-            <div className="lg:pb-3">
-              <p className="max-w-md text-base leading-relaxed text-white sm:text-lg">
-                {hero.sub}
-              </p>
-              <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-                <a
-                  href="#waitlist"
-                  className="rounded-full bg-white px-7 py-3.5 text-center text-sm font-semibold text-night hover:bg-accent-wash"
-                >
-                  {hero.primaryCta}
-                </a>
-                <Link
-                  href="/join"
-                  className="rounded-full border border-white/70 px-7 py-3.5 text-center text-sm font-semibold text-white hover:bg-white/10"
-                >
-                  {hero.secondaryCta}
-                </Link>
-              </div>
+          <div className="mx-auto mt-auto max-w-xl pt-40 text-center sm:pt-48">
+            <p className="text-balance text-base leading-relaxed text-white sm:text-lg">
+              {heroStream.sub}
+            </p>
+            <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
+              <a
+                href="#waitlist"
+                className="rounded-full bg-white px-7 py-3.5 text-center text-sm font-semibold text-night hover:bg-accent-wash"
+              >
+                {heroStream.primaryCta}
+              </a>
+              <Link
+                href="/join"
+                className="rounded-full border border-white/70 bg-night/30 px-7 py-3.5 text-center text-sm font-semibold text-white backdrop-blur-sm hover:bg-white/10"
+              >
+                {heroStream.secondaryCta}
+              </Link>
             </div>
           </div>
         </div>
-
-        <a
-          href="#how-it-works"
-          aria-label={hero.scrollCue}
-          className="absolute bottom-5 right-5 z-20 hidden h-12 w-12 items-center justify-center rounded-full border border-white/40 bg-night/50 text-white backdrop-blur-md hover:bg-night/70 lg:flex"
-        >
-          <svg
-            viewBox="0 0 24 24"
-            aria-hidden="true"
-            className="h-5 w-5"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.8"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M12 5v14M5 12l7 7 7-7" />
-          </svg>
-        </a>
       </div>
     </section>
   );

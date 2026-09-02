@@ -16,7 +16,7 @@ that belonged to nobody.
 
 | File | Where it appears | Notes |
 |---|---|---|
-| `nyc-broadway-rain.jpg` | Hero, sharp frame and blurred backdrop | Wide, deep perspective, no dominant face |
+| `nyc-broadway-rain.jpg` | Social card, hero stream | Wide, deep perspective, no dominant face |
 | `nyc-umbrellas.jpg` | "Your travel circle" | Crowd under umbrellas |
 | `tokyo-vending-night.jpg` | Arc row 1, Tokyo | Teal night palette, sits closest to the accent |
 | `yokohama-chinatown.jpg` | Arc row 2, Yokohama | Red lanterns at night |
@@ -30,6 +30,20 @@ that belonged to nobody.
 
 Exported as quality-82 JPEG: 2400px wide for the hero, 1600px for the street
 frames, 900px for the portrait food shots. Total about 5.8 MB.
+
+## Stream variants
+
+`public/images/stream/` holds a 720px, quality-76 copy of every photograph
+above. These feed the hero corridor (`src/features/marketing/stamp-stream.tsx`),
+where up to 22 cards animate at once and must not each pull a 1600px file.
+Regenerate with sips if a source changes:
+
+    sips -s format jpeg -s formatOptions 76 --resampleWidth 720 \
+      public/images/NAME.jpg --out public/images/stream/NAME.jpg
+
+The corridor cards are decorative (aria-hidden) and use a plain `<img>`, not
+`next/image`, because they live inside a 3D transform and are served from
+fixed-size files already.
 
 ## Cropping
 

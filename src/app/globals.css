@@ -109,20 +109,6 @@ body {
   }
 }
 
-/* The hero bleeds a blurred, enlarged copy of its own photograph to the
-   window edge, with the sharp frame inset on top of it (the reference
-   layout Dave supplied). Decorative only; the sharp copy carries the alt
-   text. If the file is missing the backdrop is not rendered at all and the
-   night ground shows through, which is the correct fallback. */
-.hero-backdrop {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-}
-.hero-backdrop > img {
-  filter: blur(40px) saturate(1.15);
-  transform: scale(1.18);
-}
 
 /* Arc row: tiles step down toward the middle and back up, so a row of
    photographs reads as one curve instead of a grid. Offsets are applied
