@@ -2,7 +2,6 @@ import Link from "next/link";
 import type { CSSProperties } from "react";
 import {
   site,
-  nav,
   heroStream,
   circle,
   howItWorks,
@@ -16,6 +15,9 @@ import {
 import { Photo } from "./photo";
 import { StampStream } from "./stamp-stream";
 import { Reveal } from "./reveal";
+import { SiteNav } from "./site-nav";
+import { ActiveSteps } from "./active-steps";
+import { SpotlightTile } from "./spotlight-tile";
 import { StampSpecimen } from "./stamp-specimen";
 import { WaitlistForm } from "./waitlist-form";
 
@@ -79,56 +81,6 @@ function Arrow() {
   );
 }
 
-/**
- * The nav pill. Rendered inside the hero frame rather than over the page,
- * so it sits on the photograph the way the reference layout does.
- */
-export function SiteNav() {
-  return (
-    <header className="relative z-20">
-      <div className="flex items-center justify-between gap-4 rounded-full bg-night/65 px-4 py-2.5 text-white backdrop-blur-md sm:px-5 sm:py-3">
-        <Link
-          href="/"
-          className="whitespace-nowrap font-display text-base font-semibold tracking-tight sm:text-lg"
-        >
-          {site.name}
-        </Link>
-        <nav aria-label="Site" className="flex items-center gap-4 sm:gap-6">
-          <a
-            href="#how-it-works"
-            className="hidden text-sm text-white hover:text-accent-wash sm:block"
-          >
-            {nav.howItWorks}
-          </a>
-          <a
-            href="#stamps"
-            className="hidden text-sm text-white hover:text-accent-wash sm:block"
-          >
-            {nav.stamps}
-          </a>
-          <a
-            href="#privacy"
-            className="hidden text-sm text-white hover:text-accent-wash lg:block"
-          >
-            {nav.privacy}
-          </a>
-          <Link
-            href="/login"
-            className="hidden whitespace-nowrap text-sm text-white hover:text-accent-wash sm:block"
-          >
-            {nav.memberSignIn}
-          </Link>
-          <Link
-            href="/join"
-            className="whitespace-nowrap rounded-full bg-white px-4 py-2 text-sm font-semibold text-night hover:bg-accent-wash"
-          >
-            {nav.haveAnInvite}
-          </Link>
-        </nav>
-      </div>
-    </header>
-  );
-}
 
 /**
  * The hero: a centred header over a corridor of stamps that stream out of
@@ -144,8 +96,8 @@ export function SiteNav() {
  */
 export function Hero() {
   return (
-    <section className="on-night relative isolate bg-night p-2 sm:p-4 lg:p-6">
-      <div className="relative flex min-h-[calc(100svh-1rem)] flex-col overflow-hidden rounded-[1.5rem] bg-night sm:min-h-[calc(100svh-2rem)] sm:rounded-[2rem]">
+    <section id="hero" className="on-night relative isolate bg-night p-2 sm:p-4 lg:p-6">
+      <div className="hero-frame relative flex min-h-[calc(100svh-1rem)] flex-col overflow-hidden rounded-[1.5rem] bg-night sm:min-h-[calc(100svh-2rem)] sm:rounded-[2rem]">
         <div className="hero-corridor absolute inset-0">
         {/* Two corridors, one per breakpoint. The geometry is in container
             width units, so on a phone the desktop path is a thin strip in a
@@ -264,8 +216,8 @@ export function Circle() {
       </div>
 
       {/* Two prints on a desk: the back one tilted, the front one square. */}
-      <Reveal delay={150} className="relative mx-auto aspect-[4/3] w-full max-w-lg lg:max-w-none">
-        <div className="absolute inset-0 -rotate-3 translate-x-3 translate-y-3 overflow-hidden rounded-3xl bg-night opacity-90 shadow-2xl shadow-black/40">
+      <Reveal delay={150} className="print-stack relative mx-auto aspect-[4/3] w-full max-w-lg lg:max-w-none">
+        <div className="print-back absolute inset-0 -rotate-3 translate-x-3 translate-y-3 overflow-hidden rounded-3xl bg-night opacity-90 shadow-2xl shadow-black/40">
           <Photo
             file={back.file}
             alt={back.alt}
@@ -273,7 +225,7 @@ export function Circle() {
             position={back.position}
           />
         </div>
-        <div className="absolute inset-0 overflow-hidden rounded-3xl bg-night shadow-2xl shadow-black/50 outline outline-1 outline-white/10">
+        <div className="print-front absolute inset-0 overflow-hidden rounded-3xl bg-night shadow-2xl shadow-black/50 outline outline-1 outline-white/10">
           <Photo
             file={front.file}
             alt={front.alt}
@@ -295,13 +247,13 @@ export function HowItWorks() {
           <Headline>{howItWorks.headline}</Headline>
         </Reveal>
         {/* Numbered rows with hairlines. Reads as one sequence, not a grid. */}
-        <Reveal as="ol" group className="divide-y divide-line">
+        <ActiveSteps className="divide-y divide-line">
           {howItWorks.steps.map((step, i) => (
             <li
               key={step.name}
-              className="grid gap-4 py-8 first:pt-0 last:pb-0 sm:grid-cols-[5rem_1fr] sm:gap-8"
+              className="step grid gap-4 py-8 first:pt-0 last:pb-0 sm:grid-cols-[5rem_1fr] sm:gap-8"
             >
-              <p className="font-serif text-5xl leading-none text-accent">
+              <p className="step-num font-serif text-5xl leading-none text-ink-faint">
                 {String(i + 1).padStart(2, "0")}
               </p>
               <div>
@@ -317,7 +269,7 @@ export function HowItWorks() {
               </div>
             </li>
           ))}
-        </Reveal>
+        </ActiveSteps>
       </div>
     </section>
   );
@@ -346,7 +298,7 @@ export function StampArc() {
             style={{ "--arc": item.arc } as CSSProperties}
             className="w-[44vw] max-w-[190px] shrink-0 sm:w-[170px] lg:w-[156px]"
           >
-            <div className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-night shadow-xl shadow-black/40 outline outline-1 outline-white/10">
+            <div className="arc-card relative aspect-[4/5] overflow-hidden rounded-2xl bg-night shadow-xl shadow-black/40 outline outline-1 outline-white/10">
               <Photo
                 file={item.image}
                 alt={item.alt}
@@ -444,7 +396,7 @@ export function AskTheHub() {
                 <div
                   key={answer.image}
                   className={
-                    "relative aspect-[4/5] shrink-0 overflow-hidden rounded-2xl bg-night shadow-2xl shadow-black/50 outline outline-1 outline-white/10 " +
+                    "fan-card relative aspect-[4/5] shrink-0 overflow-hidden rounded-2xl bg-night shadow-2xl shadow-black/50 outline outline-1 outline-white/10 " +
                     slot.width +
                     " " +
                     slot.layout
@@ -497,9 +449,9 @@ export function Privacy() {
         </Reveal>
         <Reveal as="ul" group className="mt-12 grid gap-5 sm:grid-cols-2">
           {privacy.tiles.map((t) => (
-            <li
+            <SpotlightTile
               key={t.title}
-              className={`tile-${t.tone} relative flex min-h-[19rem] flex-col rounded-[1.75rem] p-7 text-white sm:p-9`}
+              className={`tile-${t.tone} relative flex min-h-[19rem] flex-col overflow-hidden rounded-[1.75rem] p-7 text-white sm:p-9`}
             >
               <p className="inline-flex w-fit items-center gap-2 rounded-full bg-night/40 px-3.5 py-1.5 text-xs font-medium text-white backdrop-blur-sm">
                 <span
@@ -521,7 +473,7 @@ export function Privacy() {
                 {t.linkLabel}
                 <Arrow />
               </Link>
-            </li>
+            </SpotlightTile>
           ))}
         </Reveal>
       </div>
@@ -548,12 +500,12 @@ export function SiteFooter() {
           </div>
         </Reveal>
         {/* One frame, with a tilted ghost behind it. */}
-        <Reveal delay={150} className="relative mx-auto aspect-[4/3] w-full max-w-md lg:max-w-none">
+        <Reveal delay={150} className="print-stack relative mx-auto aspect-[4/3] w-full max-w-md lg:max-w-none">
           <div
             aria-hidden="true"
-            className="absolute inset-0 -rotate-3 translate-x-2 translate-y-2 rounded-3xl bg-surface"
+            className="print-back absolute inset-0 -rotate-3 translate-x-2 translate-y-2 rounded-3xl bg-surface"
           />
-          <div className="absolute inset-0 overflow-hidden rounded-3xl bg-night shadow-2xl shadow-black/50 outline outline-1 outline-white/10">
+          <div className="print-front absolute inset-0 overflow-hidden rounded-3xl bg-night shadow-2xl shadow-black/50 outline outline-1 outline-white/10">
             <Photo
               file={footer.ctaImage}
               alt={footer.ctaImageAlt}
@@ -582,7 +534,7 @@ export function SiteFooter() {
             <ul className="mt-4 space-y-3 text-sm text-ink-soft">
               {col.links.map((l) => (
                 <li key={l.href}>
-                  <Link href={l.href} className="hover:text-ink">
+                  <Link href={l.href} className="link-draw hover:text-ink">
                     {l.label}
                   </Link>
                 </li>

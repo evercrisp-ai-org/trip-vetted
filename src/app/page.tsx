@@ -8,6 +8,7 @@ import {
   Privacy,
   SiteFooter,
 } from "@/features/marketing/sections";
+import { FloatingNav } from "@/features/marketing/floating-nav";
 
 /*
  * The front door. Runs on the dark theme scope (ADR 0008); the app pages do
@@ -17,6 +18,9 @@ import {
 export default function MarketingPage() {
   return (
     <div className="theme-night">
+      {/* Film grain over the whole front door; see .grain in globals.css. */}
+      <div aria-hidden="true" className="grain" />
+      <FloatingNav watch="hero" />
       <main id="content">
         <Hero />
         <Circle />

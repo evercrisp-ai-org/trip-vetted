@@ -38,11 +38,41 @@ CSS in globals.css, keyed off that attribute. Tier 1, shipped here:
 - The fan deals: outer cards start stacked under the middle one and spread to
   their tilts.
 
-Tier 2 (sticky detaching nav, active-step highlighting, print unstack, tile
-cursor highlight, hover lifts) and Tier 3 (frame scale on scroll, corridor
-rush-then-cruise, card bob, film grain) are documented in the conversation
-that produced this ADR and are not built. Add them one at a time and look at
-each before the next.
+Tier 2, shipped the same day:
+
+- Floating nav (`floating-nav.tsx`): a copy of the pill slides down once the
+  hero has scrolled away; `inert` and aria-hidden while not shown, so only
+  one nav is ever usable.
+- Active step (`active-steps.tsx`): the step crossing a thin band at the
+  middle of the viewport gets `data-active` and its numeral lights. The band
+  is 10% of the viewport, narrower than any gap between steps, so exactly
+  one is active. Without JS all numerals stay accent-coloured.
+- Prints unstack on reveal and lift on hover (Circle, footer).
+- Spotlight tiles (`spotlight-tile.tsx`): a soft radial highlight follows the
+  pointer; position written straight to custom properties, no state.
+- Hover lifts on arc cards, fan cards (neighbours recede), pill buttons;
+  footer links draw an underline; the waitlist success settles in.
+
+Tier 3, shipped with restraint:
+
+- Hero frame settles as you scroll away (scale 0.94, more radius, dims). A
+  scroll-driven animation (`animation-timeline: view()`) behind @supports,
+  so browsers without it simply do not animate.
+- Corridor arrives with a zoom-settle (1.06 to 1) on top of its fade.
+- Arc cards bob a few pixels out of phase once formed, lg only, paused on
+  hover. Animates `translate` so it never fights the arc's `transform`.
+- Film grain: one fixed element, an oversized noise layer stepping through
+  five positions on the compositor, soft-light at 0.07. Deliberately faint.
+  Remove `.grain` in page.tsx and its CSS block to drop it.
+
+Not built: corridor "rush then cruise". The corridor's speed is a single
+CSS animation-duration, and changing it mid-flight jumps every card to a new
+position. The zoom-settle gives the arrival feeling without touching timing.
+Doing it properly means driving the keyframes from JS, which is more code
+than the effect is worth.
+
+Hover effects are wrapped in `@media (hover: hover)` so touch devices never
+get stuck in a hovered state.
 
 ## Gating, and why it is an inline script
 

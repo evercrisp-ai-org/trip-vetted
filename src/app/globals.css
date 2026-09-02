@@ -103,6 +103,7 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .grain { display: none; }
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
@@ -308,4 +309,226 @@ html.motion-ok [data-fan][data-reveal] {
   opacity: 1;
   transform: none;
   transition: none;
+}
+
+/* ── Motion, tier 2 and 3 (ADR 0009) ───────────────────────────────────── */
+
+/* Floating nav: slides down once the hero has scrolled away. Inert and
+   aria-hidden while not shown (see floating-nav.tsx). */
+.floating-nav {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 40;
+  translate: 0 -110%;
+  opacity: 0;
+  transition:
+    translate 0.45s var(--ease-out),
+    opacity 0.3s var(--ease-out);
+}
+.floating-nav[data-shown] {
+  translate: 0 0;
+  opacity: 1;
+}
+/* On the dark ground the pill's night wash disappears; give it an edge. */
+.floating-nav header > div {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(7, 24, 32, 0.8);
+  box-shadow: 0 16px 40px -20px rgba(0, 0, 0, 0.8);
+}
+
+/* Hero frame settles as you scroll away: scales down a touch and rounds
+   further. Scroll-driven, no JavaScript. Browsers without
+   animation-timeline simply do not animate; the frame stays put. */
+@supports (animation-timeline: scroll()) {
+  @keyframes hero-frame-settle {
+    to { scale: 0.94; border-radius: 2.75rem; opacity: 0.6; }
+  }
+  html.motion-ok .hero-frame {
+    animation: hero-frame-settle linear both;
+    animation-timeline: view();
+    animation-range: exit 0% exit 100%;
+    transform-origin: 50% 0%;
+  }
+}
+
+/* Corridor arrives with a slight zoom-settle on top of the fade in. */
+@keyframes hero-corridor-in {
+  from { opacity: 0; scale: 1.06; }
+  to   { opacity: 1; scale: 1; }
+}
+
+/* Prints unstack: the back print starts squared under the front one and
+   rotates out on reveal. Hover lifts the front and tilts the back further. */
+.print-back,
+.print-front {
+  transition:
+    rotate 0.9s var(--ease-out),
+    translate 0.9s var(--ease-out),
+    scale 0.5s var(--ease-out);
+}
+html.motion-ok .print-stack:not([data-reveal="in"]) .print-back {
+  rotate: 0deg;
+  translate: 0 0;
+}
+@media (hover: hover) {
+  .print-stack:hover .print-front {
+    translate: 0 -6px;
+    scale: 1.01;
+  }
+  .print-stack:hover .print-back {
+    rotate: -5deg;
+    translate: 1rem 1rem;
+  }
+}
+
+/* Active step: the numeral of the step crossing the middle of the viewport
+   lights up; the others stay dim. */
+.step-num {
+  transition: color 0.4s var(--ease-out), scale 0.4s var(--ease-out);
+}
+.step[data-active] .step-num {
+  color: var(--color-accent);
+  scale: 1.06;
+}
+/* Without JS nothing is ever active, so keep the numerals legible. */
+html:not(.motion-ok) .step-num {
+  color: var(--color-accent);
+}
+
+/* Arc cards: lift on hover, and a slow out-of-phase bob once formed.
+   The bob animates `translate` so it never fights the arc's transform. */
+.arc-card {
+  transition:
+    translate 0.35s var(--ease-out),
+    scale 0.35s var(--ease-out),
+    box-shadow 0.35s var(--ease-out);
+}
+@media (hover: hover) {
+  .arc > li:hover .arc-card {
+    translate: 0 -8px;
+    scale: 1.03;
+    box-shadow: 0 30px 50px -20px rgba(0, 0, 0, 0.7);
+  }
+}
+@keyframes bob {
+  from { translate: 0 -3px; }
+  to   { translate: 0 3px; }
+}
+@media (min-width: 1024px) {
+  html.motion-ok .arc[data-reveal="in"] > li {
+    animation: bob 5.5s ease-in-out infinite alternate;
+  }
+  html.motion-ok .arc[data-reveal="in"] > :nth-child(1) { animation-delay: 0s; }
+  html.motion-ok .arc[data-reveal="in"] > :nth-child(2) { animation-delay: -1.1s; }
+  html.motion-ok .arc[data-reveal="in"] > :nth-child(3) { animation-delay: -2.4s; }
+  html.motion-ok .arc[data-reveal="in"] > :nth-child(4) { animation-delay: -0.6s; }
+  html.motion-ok .arc[data-reveal="in"] > :nth-child(5) { animation-delay: -3.2s; }
+  html.motion-ok .arc[data-reveal="in"] > :nth-child(6) { animation-delay: -1.8s; }
+  html.motion-ok .arc:hover > li { animation-play-state: paused; }
+}
+
+/* Fan cards: the hovered one comes forward, its neighbours ease back. */
+.fan-card {
+  transition:
+    translate 0.8s var(--ease-out),
+    rotate 0.8s var(--ease-out),
+    scale 0.4s var(--ease-out),
+    opacity 0.5s var(--ease-out),
+    filter 0.4s var(--ease-out);
+}
+@media (hover: hover) {
+  [data-fan]:hover > .fan-card:not(:hover) {
+    scale: 0.97;
+    filter: brightness(0.75);
+  }
+  [data-fan] > .fan-card:hover {
+    scale: 1.04;
+    z-index: 30;
+  }
+}
+
+/* Spotlight tiles: a soft highlight follows the pointer. */
+.spotlight {
+  transition: translate 0.3s var(--ease-out);
+}
+.spotlight::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    22rem circle at var(--mx, 50%) var(--my, 50%),
+    rgba(255, 255, 255, 0.11),
+    transparent 60%
+  );
+  opacity: 0;
+  transition: opacity 0.4s var(--ease-out);
+}
+@media (hover: hover) {
+  .spotlight:hover { translate: 0 -2px; }
+  .spotlight:hover::before { opacity: 1; }
+}
+
+/* Buttons and links */
+a[class*="rounded-full"] {
+  transition:
+    scale 0.25s var(--ease-out),
+    background-color 0.25s var(--ease-out),
+    box-shadow 0.25s var(--ease-out);
+}
+@media (hover: hover) {
+  a[class*="rounded-full"]:hover {
+    scale: 1.02;
+    box-shadow: 0 12px 30px -12px rgba(0, 0, 0, 0.6);
+  }
+}
+.link-draw {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-size: 0% 1px;
+  background-position: 0 100%;
+  transition: background-size 0.35s var(--ease-out), color 0.25s;
+  padding-bottom: 2px;
+}
+.link-draw:hover { background-size: 100% 1px; }
+
+/* Waitlist success settles in rather than snapping. */
+@keyframes settle-in {
+  from { opacity: 0; translate: 0 6px; }
+  to   { opacity: 1; translate: 0 0; }
+}
+html.motion-ok [role="status"] {
+  animation: settle-in 0.45s var(--ease-out) both;
+}
+
+/* Film grain over the front door. One fixed element, an oversized noise
+   layer stepping through six positions on the compositor. Faint on
+   purpose: if it is the first thing you notice, lower the opacity. Delete
+   .grain in page.tsx and this block to remove it entirely. */
+.grain {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  pointer-events: none;
+  overflow: hidden;
+  opacity: 0.07;
+  mix-blend-mode: soft-light;
+}
+.grain::before {
+  content: "";
+  position: absolute;
+  inset: -100%;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 240px 240px;
+}
+@keyframes grain-step {
+  0%   { translate: 0 0; }
+  20%  { translate: -6% 4%; }
+  40%  { translate: 4% -7%; }
+  60%  { translate: -3% 8%; }
+  80%  { translate: 7% -2%; }
+  100% { translate: 0 0; }
+}
+html.motion-ok .grain::before {
+  animation: grain-step 1.4s steps(5) infinite;
 }

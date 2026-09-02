@@ -26,9 +26,12 @@ export function Reveal<T extends Tag = "div">({
   delay = 0,
   className,
   children,
+  ref: outerRef,
   ...rest
 }: {
   as?: T;
+  /** Forwarded to the rendered element, alongside the observer's own ref. */
+  ref?: React.Ref<HTMLElement>;
   group?: boolean;
   blur?: boolean;
   /** Milliseconds before the transition starts once in view. */
@@ -38,6 +41,16 @@ export function Reveal<T extends Tag = "div">({
 } & Omit<React.ComponentPropsWithoutRef<T>, "as" | "children" | "className">) {
   const ref = React.useRef<HTMLElement>(null);
   const [inView, setInView] = React.useState(false);
+
+  // One element, two refs: ours for the observer, the caller's if given.
+  const setRefs = React.useCallback(
+    (el: HTMLElement | null) => {
+      ref.current = el;
+      if (typeof outerRef === "function") outerRef(el);
+      else if (outerRef) outerRef.current = el;
+    },
+    [outerRef]
+  );
 
   React.useEffect(() => {
     const el = ref.current;
@@ -64,7 +77,7 @@ export function Reveal<T extends Tag = "div">({
   const Comp = (as ?? "div") as React.ElementType;
   return (
     <Comp
-      ref={ref}
+      ref={setRefs}
       className={className}
       style={delay ? { "--reveal-delay": `${delay}ms` } : undefined}
       {...(group ? { "data-reveal-group": inView ? "in" : "" } : { "data-reveal": inView ? "in" : "" })}
