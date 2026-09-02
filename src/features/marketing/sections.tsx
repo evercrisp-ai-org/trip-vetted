@@ -15,6 +15,7 @@ import {
 } from "@/content/site";
 import { Photo } from "./photo";
 import { StampStream } from "./stamp-stream";
+import { Reveal } from "./reveal";
 import { StampSpecimen } from "./stamp-specimen";
 import { WaitlistForm } from "./waitlist-form";
 
@@ -145,6 +146,7 @@ export function Hero() {
   return (
     <section className="on-night relative isolate bg-night p-2 sm:p-4 lg:p-6">
       <div className="relative flex min-h-[calc(100svh-1rem)] flex-col overflow-hidden rounded-[1.5rem] bg-night sm:min-h-[calc(100svh-2rem)] sm:rounded-[2rem]">
+        <div className="hero-corridor absolute inset-0">
         {/* Two corridors, one per breakpoint. The geometry is in container
             width units, so on a phone the desktop path is a thin strip in a
             tall frame. The small-screen path grows cards taller and holds
@@ -172,6 +174,7 @@ export function Hero() {
           path={{ exitHeight: 95, railExit: 26 }}
           className="absolute inset-0 lg:hidden"
         />
+        </div>
 
         {/* Fog at the vanishing point. */}
         <div
@@ -196,16 +199,16 @@ export function Hero() {
         <div className="relative flex flex-1 flex-col p-3 pb-6 sm:p-5 sm:pb-8 lg:p-7 lg:pb-10">
           <SiteNav />
 
-          <div className="mx-auto mt-10 max-w-3xl text-center sm:mt-14 lg:mt-16">
+          <Reveal blur delay={250} className="mx-auto mt-10 max-w-3xl text-center sm:mt-14 lg:mt-16">
             <p className="inline-flex items-center rounded-full border border-white/40 bg-night/40 px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.25em] text-white backdrop-blur-sm">
               {heroStream.kicker}
             </p>
             <h1 className="mt-6 text-balance font-serif text-5xl font-normal leading-[1.02] tracking-tight text-white sm:text-6xl lg:text-7xl">
               {heroStream.headline}
             </h1>
-          </div>
+          </Reveal>
 
-          <div className="mx-auto mt-auto max-w-xl pt-40 text-center sm:pt-48">
+          <Reveal delay={800} className="mx-auto mt-auto max-w-xl pt-40 text-center sm:pt-48">
             <p className="text-balance text-base leading-relaxed text-white sm:text-lg">
               {heroStream.sub}
             </p>
@@ -223,7 +226,7 @@ export function Hero() {
                 {heroStream.secondaryCta}
               </Link>
             </div>
-          </div>
+          </Reveal>
         </div>
       </div>
     </section>
@@ -235,13 +238,15 @@ export function Circle() {
   return (
     <section className="mx-auto grid max-w-6xl gap-14 px-4 py-20 sm:px-6 sm:py-28 lg:grid-cols-[1.1fr_1fr] lg:items-center lg:gap-20">
       <div>
-        <Kicker>{circle.kicker}</Kicker>
-        <Headline>{circle.headline}</Headline>
-        <p className="mt-6 max-w-xl text-lg leading-relaxed text-ink-soft">
-          {circle.body}
-        </p>
+        <Reveal blur>
+          <Kicker>{circle.kicker}</Kicker>
+          <Headline>{circle.headline}</Headline>
+          <p className="mt-6 max-w-xl text-lg leading-relaxed text-ink-soft">
+            {circle.body}
+          </p>
+        </Reveal>
         {/* Three points as a ruled list, not three cards. */}
-        <dl className="mt-10 divide-y divide-line border-y border-line">
+        <Reveal as="dl" group className="mt-10 divide-y divide-line border-y border-line">
           {circle.points.map((p) => (
             <div
               key={p.title}
@@ -255,11 +260,11 @@ export function Circle() {
               </dd>
             </div>
           ))}
-        </dl>
+        </Reveal>
       </div>
 
       {/* Two prints on a desk: the back one tilted, the front one square. */}
-      <div className="relative mx-auto aspect-[4/3] w-full max-w-lg lg:max-w-none">
+      <Reveal delay={150} className="relative mx-auto aspect-[4/3] w-full max-w-lg lg:max-w-none">
         <div className="absolute inset-0 -rotate-3 translate-x-3 translate-y-3 overflow-hidden rounded-3xl bg-night opacity-90 shadow-2xl shadow-black/40">
           <Photo
             file={back.file}
@@ -276,7 +281,7 @@ export function Circle() {
             position={front.position}
           />
         </div>
-      </div>
+      </Reveal>
     </section>
   );
 }
@@ -285,12 +290,12 @@ export function HowItWorks() {
   return (
     <section id="how-it-works" className="border-y border-line bg-surface-sunk/60">
       <div className="mx-auto grid max-w-6xl gap-12 px-4 py-20 sm:px-6 sm:py-28 lg:grid-cols-[1fr_1.4fr] lg:gap-20">
-        <div className="lg:sticky lg:top-24 lg:self-start">
+        <Reveal blur className="lg:sticky lg:top-24 lg:self-start">
           <Kicker>{howItWorks.kicker}</Kicker>
           <Headline>{howItWorks.headline}</Headline>
-        </div>
+        </Reveal>
         {/* Numbered rows with hairlines. Reads as one sequence, not a grid. */}
-        <ol className="divide-y divide-line">
+        <Reveal as="ol" group className="divide-y divide-line">
           {howItWorks.steps.map((step, i) => (
             <li
               key={step.name}
@@ -312,7 +317,7 @@ export function HowItWorks() {
               </div>
             </li>
           ))}
-        </ol>
+        </Reveal>
       </div>
     </section>
   );
@@ -325,15 +330,16 @@ export function HowItWorks() {
 export function StampArc() {
   return (
     <section aria-label={stampArc.railLabel} className="overflow-hidden">
-      <div className="mx-auto max-w-3xl px-4 pt-20 text-center sm:px-6 sm:pt-28">
+      <Reveal blur className="mx-auto max-w-3xl px-4 pt-20 text-center sm:px-6 sm:pt-28">
         <Kicker>{stampArc.kicker}</Kicker>
         <Headline>{stampArc.headline}</Headline>
         <p className="mx-auto mt-5 max-w-xl leading-relaxed text-ink-soft">
           {stampArc.sub}
         </p>
-      </div>
+      </Reveal>
 
-      <ul className="arc rail mx-auto flex max-w-6xl snap-x gap-4 overflow-x-auto px-4 pb-20 pt-12 sm:gap-5 sm:px-6 lg:justify-center lg:overflow-visible lg:pb-48 lg:pt-16">
+      {/* Observed as one element; the arc CSS staggers the cards outside in. */}
+      <Reveal as="ul" className="arc rail mx-auto flex max-w-6xl snap-x gap-4 overflow-x-auto px-4 pb-20 pt-12 sm:gap-5 sm:px-6 lg:justify-center lg:overflow-visible lg:pb-48 lg:pt-16">
         {stampArc.items.map((item) => (
           <li
             key={item.image}
@@ -360,7 +366,7 @@ export function StampArc() {
             </p>
           </li>
         ))}
-      </ul>
+      </Reveal>
     </section>
   );
 }
@@ -369,7 +375,7 @@ export function StampsAndBriefs() {
   return (
     <section id="stamps" className="border-y border-line bg-surface-sunk/60">
       <div className="mx-auto grid max-w-6xl gap-14 px-4 py-20 sm:px-6 sm:py-28 lg:grid-cols-2 lg:items-center lg:gap-20">
-        <div>
+        <Reveal blur>
           <Kicker>{stampsAndBriefs.kicker}</Kicker>
           <Headline>{stampsAndBriefs.headline}</Headline>
           <p className="mt-6 text-lg leading-relaxed text-ink-soft">
@@ -378,15 +384,16 @@ export function StampsAndBriefs() {
           <p className="mt-8 border-l-2 border-accent pl-5 text-sm leading-relaxed text-ink">
             {stampsAndBriefs.briefNote}
           </p>
-        </div>
+        </Reveal>
         <div>
           <p className="mb-4 text-center text-xs font-semibold uppercase tracking-[0.25em] text-ink-faint lg:hidden">
             {stampsAndBriefs.stampCardLabel}
           </p>
-          {/* A stamp is paper. It keeps the light tokens inside a dark page. */}
-          <div className="theme-paper">
+          {/* A stamp is paper. It keeps the light tokens inside a dark page.
+              The card drops in, then the VETTED mark lands (.stamp-mark). */}
+          <Reveal className="theme-paper">
             <StampSpecimen rotate="-rotate-2" />
-          </div>
+          </Reveal>
         </div>
       </div>
     </section>
@@ -411,25 +418,26 @@ export function AskTheHub() {
   return (
     <section id="hub" className="overflow-hidden">
       <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28">
-        <div className="mx-auto max-w-2xl text-center">
+        <Reveal blur className="mx-auto max-w-2xl text-center">
           <Kicker>{askTheHub.kicker}</Kicker>
           <Headline>{askTheHub.headline}</Headline>
           <p className="mt-6 text-lg leading-relaxed text-ink-soft">
             {askTheHub.body}
           </p>
-        </div>
+        </Reveal>
 
         <figure className="mt-14">
-          <figcaption className="mx-auto max-w-xl text-center">
+          <Reveal as="figure" className="mx-auto max-w-xl text-center">
             <p className="text-xs font-semibold uppercase tracking-[0.25em] text-ink-faint">
               {askTheHub.questionLabel}
             </p>
             <p className="mt-3 font-serif text-3xl leading-snug text-ink sm:text-4xl">
               {askTheHub.question}
             </p>
-          </figcaption>
+          </Reveal>
 
-          <div className="mx-auto mt-12 flex w-full max-w-3xl items-center justify-center">
+          {/* data-fan: the deal animation in globals.css. */}
+          <Reveal data-fan="" className="mx-auto mt-12 flex w-full max-w-3xl items-center justify-center">
             {askTheHub.answers.slice(0, 3).map((answer, i) => {
               const slot = FAN[i];
               return (
@@ -468,7 +476,7 @@ export function AskTheHub() {
                 </div>
               );
             })}
-          </div>
+          </Reveal>
         </figure>
       </div>
     </section>
@@ -483,11 +491,11 @@ export function Privacy() {
   return (
     <section id="privacy" className="border-t border-line">
       <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28">
-        <div className="max-w-2xl">
+        <Reveal blur className="max-w-2xl">
           <Kicker>{privacy.kicker}</Kicker>
           <Headline>{privacy.headline}</Headline>
-        </div>
-        <ul className="mt-12 grid gap-5 sm:grid-cols-2">
+        </Reveal>
+        <Reveal as="ul" group className="mt-12 grid gap-5 sm:grid-cols-2">
           {privacy.tiles.map((t) => (
             <li
               key={t.title}
@@ -515,7 +523,7 @@ export function Privacy() {
               </Link>
             </li>
           ))}
-        </ul>
+        </Reveal>
       </div>
     </section>
   );
@@ -530,7 +538,7 @@ export function SiteFooter() {
   return (
     <footer id="waitlist" className="border-t border-line">
       <div className="mx-auto grid max-w-6xl items-center gap-14 px-4 pb-16 pt-20 sm:px-6 sm:pt-28 lg:grid-cols-[1.2fr_1fr] lg:gap-20">
-        <div>
+        <Reveal blur>
           <Headline className="!mt-0">{waitlist.headline}</Headline>
           <p className="mt-5 max-w-xl text-lg leading-relaxed text-ink-soft">
             {waitlist.body}
@@ -538,9 +546,9 @@ export function SiteFooter() {
           <div className="mt-8 max-w-xl">
             <WaitlistForm />
           </div>
-        </div>
+        </Reveal>
         {/* One frame, with a tilted ghost behind it. */}
-        <div className="relative mx-auto aspect-[4/3] w-full max-w-md lg:max-w-none">
+        <Reveal delay={150} className="relative mx-auto aspect-[4/3] w-full max-w-md lg:max-w-none">
           <div
             aria-hidden="true"
             className="absolute inset-0 -rotate-3 translate-x-2 translate-y-2 rounded-3xl bg-surface"
@@ -553,10 +561,10 @@ export function SiteFooter() {
               position="50% 45%"
             />
           </div>
-        </div>
+        </Reveal>
       </div>
 
-      <div className="mx-auto grid max-w-6xl gap-10 px-4 pb-14 pt-8 sm:grid-cols-[1.4fr_1fr_1fr] sm:px-6 lg:gap-16">
+      <Reveal group className="mx-auto grid max-w-6xl gap-10 px-4 pb-14 pt-8 sm:grid-cols-[1.4fr_1fr_1fr] sm:px-6 lg:gap-16">
         <div>
           <p className="font-display text-xl font-semibold text-ink">{site.name}</p>
           <p className="mt-1 text-xs font-semibold uppercase tracking-[0.2em] text-accent">
@@ -582,7 +590,7 @@ export function SiteFooter() {
             </ul>
           </nav>
         ))}
-      </div>
+      </Reveal>
       <div className="border-t border-line">
         <p className="mx-auto max-w-6xl px-4 py-5 text-xs text-ink-faint sm:px-6">
           {footer.fineprint}

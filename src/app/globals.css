@@ -172,3 +172,135 @@ body {
 .tile-slate { background: linear-gradient(135deg, #2a3b4b 0%, #16222d 100%); }
 .tile-plum  { background: linear-gradient(135deg, #3b2f4d 0%, #221a2e 100%); }
 .tile-sage  { background: linear-gradient(135deg, #234a3d 0%, #132a22 100%); }
+
+/* ── Motion ──────────────────────────────────────────────────────────────
+   Everything below is gated on html.motion-ok (set by an inline script in
+   layout.tsx when JS runs and reduced motion is off). Without it, every
+   element is in its resting, visible state. The reduced-motion block above
+   also collapses all durations, as a second fence.
+
+   Rule of thumb (ADR 0009): transform, opacity and filter only. Blur is the
+   expensive one, so it is opt-in via data-reveal-blur and used on a handful
+   of headline blocks, never on lists. */
+:root {
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Single-element reveal */
+html.motion-ok [data-reveal] {
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 0.7s var(--ease-out) var(--reveal-delay, 0ms),
+    transform 0.7s var(--ease-out) var(--reveal-delay, 0ms),
+    filter 0.7s var(--ease-out) var(--reveal-delay, 0ms);
+}
+html.motion-ok [data-reveal][data-reveal-blur] {
+  filter: blur(8px);
+}
+html.motion-ok [data-reveal="in"] {
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+
+/* Grouped reveal: the observed element stays put, its children stagger. */
+html.motion-ok [data-reveal-group] > * {
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 0.6s var(--ease-out),
+    transform 0.6s var(--ease-out);
+}
+html.motion-ok [data-reveal-group="in"] > * {
+  opacity: 1;
+  transform: none;
+}
+html.motion-ok [data-reveal-group] > :nth-child(1)  { transition-delay: 0ms; }
+html.motion-ok [data-reveal-group] > :nth-child(2)  { transition-delay: 80ms; }
+html.motion-ok [data-reveal-group] > :nth-child(3)  { transition-delay: 160ms; }
+html.motion-ok [data-reveal-group] > :nth-child(4)  { transition-delay: 240ms; }
+html.motion-ok [data-reveal-group] > :nth-child(5)  { transition-delay: 320ms; }
+html.motion-ok [data-reveal-group] > :nth-child(6)  { transition-delay: 400ms; }
+html.motion-ok [data-reveal-group] > :nth-child(n + 7) { transition-delay: 480ms; }
+
+/* Hero load: the corridor fades up from black while the header rises. */
+@keyframes hero-corridor-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+html.motion-ok .hero-corridor {
+  animation: hero-corridor-in 1.6s var(--ease-out) both;
+}
+
+/* The arc forms: cards enter flat and drop into their offsets, outside in.
+   This overrides the generic .arc transform from earlier in the file. */
+.arc > * {
+  --p: 1;
+  transition:
+    transform 0.9s var(--ease-out),
+    opacity 0.6s var(--ease-out);
+}
+@media (min-width: 1024px) {
+  .arc > * {
+    transform: translateY(calc(var(--arc) * var(--p)));
+  }
+}
+html.motion-ok .arc:not([data-reveal="in"]) > * {
+  --p: 0;
+  opacity: 0;
+}
+html.motion-ok .arc > :nth-child(1), html.motion-ok .arc > :nth-child(6) { transition-delay: 0ms; }
+html.motion-ok .arc > :nth-child(2), html.motion-ok .arc > :nth-child(5) { transition-delay: 140ms; }
+html.motion-ok .arc > :nth-child(3), html.motion-ok .arc > :nth-child(4) { transition-delay: 280ms; }
+/* The ul itself must not move or fade when it is the observed element. */
+html.motion-ok .arc[data-reveal] {
+  opacity: 1;
+  transform: none;
+  transition: none;
+}
+
+/* The stamp lands: after the card has settled, the mark slams down. */
+@keyframes stamp-land {
+  0%   { opacity: 0; transform: scale(1.7); rotate: -14deg; }
+  55%  { opacity: 1; transform: scale(0.94); rotate: -4deg; }
+  75%  { transform: scale(1.04); rotate: -7deg; }
+  100% { transform: scale(1); rotate: -6deg; }
+}
+html.motion-ok [data-reveal] .stamp-mark {
+  opacity: 0;
+}
+html.motion-ok [data-reveal="in"] .stamp-mark {
+  animation: stamp-land 0.55s cubic-bezier(0.2, 0.9, 0.3, 1.1) 0.55s both;
+}
+
+/* The fan deals: cards start stacked under the middle one and spread. */
+html.motion-ok [data-fan] > * {
+  transition:
+    translate 0.8s var(--ease-out),
+    rotate 0.8s var(--ease-out),
+    opacity 0.5s var(--ease-out);
+}
+html.motion-ok [data-fan]:not([data-reveal="in"]) > :nth-child(1) {
+  translate: 46% 1.5rem;
+  rotate: 0deg;
+  opacity: 0;
+}
+html.motion-ok [data-fan]:not([data-reveal="in"]) > :nth-child(3) {
+  translate: -46% 1.5rem;
+  rotate: 0deg;
+  opacity: 0;
+}
+html.motion-ok [data-fan]:not([data-reveal="in"]) > :nth-child(2) {
+  translate: 0 1.5rem;
+  opacity: 0;
+}
+html.motion-ok [data-fan] > :nth-child(2) { transition-delay: 0ms; }
+html.motion-ok [data-fan] > :nth-child(1),
+html.motion-ok [data-fan] > :nth-child(3) { transition-delay: 180ms; }
+/* The fan container is the observed element and must not move itself. */
+html.motion-ok [data-fan][data-reveal] {
+  opacity: 1;
+  transform: none;
+  transition: none;
+}

@@ -39,7 +39,7 @@ export function StampSpecimen({ rotate = "-rotate-1" }: { rotate?: string }) {
       </dl>
       <div className="mt-5 flex items-center justify-between border-t border-dashed border-line pt-3">
         <span className="text-xs text-ink-soft">signed, {s.author}</span>
-        <span className="inline-block -rotate-6 rounded-md border-2 border-accent px-2 py-0.5 text-[11px] font-bold uppercase tracking-[0.25em] text-accent">
+        <span className="stamp-mark inline-block -rotate-6 rounded-md border-2 border-accent px-2 py-0.5 text-[11px] font-bold uppercase tracking-[0.25em] text-accent">
           Vetted
         </span>
       </div>

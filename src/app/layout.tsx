@@ -68,6 +68,17 @@ export default function RootLayout({
       lang="en"
       className={`${outfit.variable} ${inter.variable} ${newsreader.variable} ${plexMono.variable}`}
     >
+      <head>
+        {/* Adds html.motion-ok before first paint when JS runs and the visitor
+            has not asked for reduced motion. globals.css hides reveal targets
+            only under that class, so without JS everything is simply visible. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "if(!matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.classList.add('motion-ok')",
+          }}
+        />
+      </head>
       <body className="antialiased">
         <a
           href="#content"
