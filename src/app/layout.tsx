@@ -64,8 +64,11 @@ export default function RootLayout({
     // property is resolved where it is declared. On <body> they are out of
     // reach, every font token becomes invalid, and the whole site silently
     // falls back to the system font. It did, for a while.
+    // suppressHydrationWarning: the inline script below adds a class to <html>
+    // before React hydrates, which React would otherwise report as a mismatch.
     <html
       lang="en"
+      suppressHydrationWarning
       className={`${outfit.variable} ${inter.variable} ${newsreader.variable} ${plexMono.variable}`}
     >
       <head>

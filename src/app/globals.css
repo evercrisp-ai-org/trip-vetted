@@ -203,6 +203,11 @@ html.motion-ok [data-reveal="in"] {
   transform: none;
   filter: none;
 }
+/* Must match the blur rule's specificity (two attribute selectors) or the
+   blur wins after reveal and headlines stay soft forever. It did, once. */
+html.motion-ok [data-reveal="in"][data-reveal-blur] {
+  filter: none;
+}
 
 /* Grouped reveal: the observed element stays put, its children stagger. */
 html.motion-ok [data-reveal-group] > * {
