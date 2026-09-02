@@ -1,93 +1,67 @@
 # Imagery
 
-Every image slot on the marketing site, with its exact generation prompt,
-aspect ratio, and target filename. Drop the generated file into
-`public/images/` with the exact filename and it appears on the next build
-or dev reload. Zero code changes. Until a file exists, its slot renders
-the branded placeholder (teal-to-deep-blue gradient with grain), so the
-site is never broken while imagery is in progress.
+The marketing site uses real photographs supplied by the client, not
+generated imagery. They live in `public/images/` and are referenced by
+filename from `src/content/site.ts`.
 
-Two hard rules from BUILD-SPEC section 7:
+This replaces the earlier AI-generation brief. The reason is editorial: Trip
+Vetted's claim is that its recommendations come from real people who were
+actually there, and real, imperfect, weather-beaten travel frames make that
+claim where polished stock undermines it. Every photograph on the page is
+presented as a member's stamp, which is also why the waitlist band carries no
+photograph at all: a decorative image there would be the only one on the page
+that belonged to nobody.
 
-1. **No AI-generated human faces, anywhere.** If a person appears at all,
-   they must be distant, silhouetted, or facing away, and unrecognizable.
-   Prompts below say this explicitly. If a generation produces a
-   recognizable face, discard it and rerun.
-2. No text, logos, watermarks, or UI elements inside images. Add
-   "no text, no watermarks" to every run.
+## Inventory
 
-Style constants for every prompt: photographic and cinematic, natural
-light, muted film-like color grade with teal-leaning shadows, no HDR
-crunch, no oversaturation, no illustration or 3D render look.
+| File | Where it appears | Notes |
+|---|---|---|
+| `nyc-broadway-rain.jpg` | Hero, sharp frame and blurred backdrop | Wide, deep perspective, no dominant face |
+| `nyc-umbrellas.jpg` | "Your travel circle" | Crowd under umbrellas |
+| `tokyo-vending-night.jpg` | Arc row 1, Tokyo | Teal night palette, sits closest to the accent |
+| `yokohama-chinatown.jpg` | Arc row 2, Yokohama | Red lanterns at night |
+| `bangkok-popart-market.jpg` | Arc row 3, Bangkok | Wall of prints |
+| `bangkok-striped-wall.jpg` | Arc row 4, Bangkok | Orange and white checks |
+| `nyc-bodega.jpg` | Arc row 5, New York | Corner shop interior |
+| `nyc-graffiti-wall.jpg` | Arc row 6, New York | Green graffitied wall |
+| `food-thali.jpg` | Ask the hub, first answer | Portrait |
+| `food-biryani.jpg` | Ask the hub, second answer | Portrait |
+| `food-rasmalai.jpg` | Ask the hub, third answer | Portrait |
 
-| # | File | Where it appears | Aspect | Minimum size |
-|---|------|------------------|--------|--------------|
-| 1 | `hero-vista.jpg` | Homepage hero, full bleed | 16:9 | 2560x1440 |
-| 2 | `circle-planning.jpg` | "Your travel circle" section | 4:3 | 1600x1200 |
-| 3 | `dest-tokyo.jpg` | Destinations rail, card 1 | 4:5 | 1200x1500 |
-| 4 | `dest-kyoto.jpg` | Destinations rail, card 2 | 4:5 | 1200x1500 |
-| 5 | `dest-lisbon.jpg` | Destinations rail, card 3 | 4:5 | 1200x1500 |
-| 6 | `dest-oaxaca.jpg` | Destinations rail, card 4 | 4:5 | 1200x1500 |
-| 7 | `band-coast.jpg` | Waitlist band background | 3:1 | 2400x800 |
+Exported as quality-82 JPEG: 2400px wide for the hero, 1600px for the street
+frames, 900px for the portrait food shots. Total about 5.8 MB.
 
-Export as quality-80 JPG. The filename must match the table exactly,
-including the .jpg extension, or the slot will keep showing the
-placeholder.
+## Cropping
 
-A dark scrim is layered over slots 1 and 7 in code, and over the caption
-zone of slots 3 to 6. Images can therefore be naturally bright; contrast
-for text is guaranteed by the scrim, not by the image.
+Files are stored at their own natural crop. The layout crops them with CSS
+(`object-fit: cover`) and each slot names an `object-position` in
+`src/content/site.ts`, because the arc tiles are 4:5 portrait and every source
+frame is landscape. **Retune `position` rather than re-exporting a file.**
+Values were set by looking at the rendered tiles, not calculated: the striped
+wall needs `80% 58%` to keep the walker in frame, the graffiti wall needs
+`60% 62%` to centre hers, and the corner shop needs `44% 44%` to hold both the
+shelves and the shoppers.
 
-## Prompts
+## Adding or replacing a photograph
 
-**1. hero-vista.jpg**
-> Cinematic aerial photograph of a Mediterranean coastal town at dusk,
-> terracotta rooftops stepping down to a small harbor, lights just coming
-> on along the waterfront, calm sea holding the last blue of the sky,
-> shot from high above at a gentle angle, 35mm film grade, teal-leaning
-> shadows, soft natural light, no people, no text, no watermarks.
+1. Export to `public/images/` at the sizes above.
+2. Add the row to the table here.
+3. Add the file, alt text, and `position` to `src/content/site.ts`.
+4. Use the `Photo` component (`src/features/marketing/photo.tsx`).
 
-**2. circle-planning.jpg**
-> Overhead photograph of a wooden table mid trip-planning: an unfolded
-> paper map, a worn passport, printed film photos of landscapes, a
-> handwritten notebook, two espresso cups, warm window light from one
-> side, shallow depth of field, film grade, hands may appear at frame
-> edge but no faces, no visible readable text on any item, no watermarks.
+`Photo` falls back to a branded teal placeholder when a file is missing, so a
+half-finished swap degrades instead of breaking. `PhotoBackdrop` is the
+blurred hero backdrop and renders nothing at all when its file is absent.
 
-**3. dest-tokyo.jpg**
-> Photograph of a narrow Tokyo side alley at night, paper lanterns and
-> small izakaya facades, wet pavement reflecting warm and teal light,
-> steam drifting from a doorway, one distant silhouetted figure walking
-> away from camera, unrecognizable, vertical composition, cinematic film
-> grade, no readable signage, no text, no watermarks.
+## Two things to settle before this goes public
 
-**4. dest-kyoto.jpg**
-> Photograph of vermilion torii gates over a forested stone path at
-> dawn, soft mist between the gates, early light, completely empty of
-> people, vertical composition, muted film grade with teal shadows, no
-> text, no watermarks.
-
-**5. dest-lisbon.jpg**
-> Photograph of a steep Lisbon street in late afternoon, azulejo-tiled
-> facades, laundry lines high above, a yellow tram small in the distance,
-> long shadows, any pedestrians distant and facing away, unrecognizable,
-> vertical composition, film grade, no readable text, no watermarks.
-
-**6. dest-oaxaca.jpg**
-> Photograph of agave fields outside Oaxaca under a dramatic late-day
-> sky, dirt road leading toward distant blue mountains, golden side
-> light, no people, vertical composition, cinematic film grade, no text,
-> no watermarks.
-
-**7. band-coast.jpg**
-> Very wide photograph of a dark coastline at night, a lighthouse beam
-> sweeping over black water, faint stars, deep blue-teal palette, almost
-> abstract, strong horizontal composition, no people, no text, no
-> watermarks.
-
-## Adding or changing a slot
-
-1. Add the row and prompt here.
-2. Add alt text to `src/content/site.ts`.
-3. Use the `Photo` component (`src/features/marketing/photo.tsx`) with the
-   new filename. It handles the placeholder automatically.
+1. **Rights.** Several frames contain identifiable people photographed in
+   public. Street photography is one thing; using a stranger's recognisable
+   face to market a product is another, and in many places it needs a release.
+   Confirm the client owns these images and is comfortable with the people in
+   them appearing on a commercial site. If any single frame is a problem,
+   swapping it is a one-line change.
+2. **Geography and copy.** The captions attribute each frame to a seeded demo
+   member (Maya, Jonah, Priya, Sam) and name a plausible place. They are
+   illustrative, and the footer says so. Before real launch either replace
+   them with genuine member stamps or keep the disclaimer prominent.

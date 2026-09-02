@@ -17,24 +17,29 @@ export const nav = {
   howItWorks: "How it works",
   privacy: "Privacy",
   memberSignIn: "Member sign in",
+  stamps: "Stamps",
   haveAnInvite: "I have an invite",
 };
 
 export const hero = {
   kicker: "Invite-only travel network",
+  image: "nyc-broadway-rain.jpg",
   imageAlt:
-    "A coastal town at dusk seen from above, lights coming on along the waterfront",
-  headline: "Travel advice from people who know you,",
-  headlineEmphasis: "not ten thousand strangers.",
+    "A wide Manhattan avenue in the rain, wet asphalt reflecting traffic lights, people crossing under umbrellas",
+  /* Three lines, set deliberately. The break is part of the composition,
+     so edit the lines rather than reflowing one long string. */
+  lines: ["Travel advice", "from people", "who know you."],
   sub: "Trip Vetted is a private circle where every recommendation is signed by a friend who was actually there. No review scores from the crowd. No listicles. Just your people, and where they would send you.",
   primaryCta: "Join the waitlist",
   secondaryCta: "I have an invite code",
+  scrollCue: "See how it works",
 };
 
 export const circle = {
+  image: "nyc-umbrellas.jpg",
   kicker: "Your travel circle",
   imageAlt:
-    "A table covered with an open map, film photos, a passport, and handwritten notes",
+    "A crowd crossing a rainy city street under black umbrellas",
   headline: "Five friends who travel well beat five thousand reviews.",
   body: "You already trust certain people about where to eat and where to stay. Trip Vetted makes that trust usable. Your circle is built one invitation at a time, and you can always see who brought anyone in. If a tip shows up in your plans, you know exactly whose taste it reflects.",
   points: [
@@ -94,43 +99,102 @@ export const stampsAndBriefs = {
     "Every line in a brief is cited back to the stamp it came from. Nothing is invented to fill space.",
 };
 
-export const destinations = {
+export const stampArc = {
   kicker: "From the passport",
-  headline: "Places your circle has already vetted.",
-  sub: "Every card below traces back to a member's stamp: dated, signed, and specific.",
-  railLabel: "Vetted destinations",
+  headline: "Every photograph here is somebody's stamp.",
+  sub: "Not stock photography. Real frames from real trips, each one signed and dated by the member who took it.",
+  railLabel: "Recent stamps from the network",
+  /*
+   * `arc` is the vertical offset that makes the row read as a curve, applied
+   * from lg up only (see .arc in globals.css). Keep the sequence symmetric:
+   * out, down, deepest, deepest, down, out.
+   *
+   * `position` is the object-position for this frame. These are real
+   * photographs at their own crops, so each one names the part that has to
+   * survive being cut to 4:5. Adjust here, never by re-exporting the file.
+   */
   items: [
     {
-      name: "Tokyo",
-      country: "Japan",
-      coords: "35.6762 N, 139.6503 E",
-      note: "Jonah's standing-sushi mornings and yakitori alleys",
-      image: "dest-tokyo.jpg",
-      alt: "A narrow Tokyo alley at night lit by paper lanterns and neon signs",
+      place: "Tokyo",
+      region: "Japan",
+      note: "Jonah, vending machines at one in the morning",
+      image: "tokyo-vending-night.jpg",
+      alt: "Lit drink vending machines on a quiet Tokyo street corner at night",
+      position: "45% 62%",
+      arc: "0px",
     },
     {
-      name: "Kyoto",
-      country: "Japan",
-      coords: "35.0116 N, 135.7681 E",
-      note: "Priya's 6am shrine walks, before anyone else wakes",
-      image: "dest-kyoto.jpg",
-      alt: "Red torii gates on a forested path in early morning light, empty of people",
+      place: "Yokohama",
+      region: "Japan",
+      note: "Priya, the lantern street on a cold night",
+      image: "yokohama-chinatown.jpg",
+      alt: "A Chinatown street at night strung with red paper lanterns and shop signs",
+      position: "50% 45%",
+      arc: "52px",
     },
     {
-      name: "Lisbon",
-      country: "Portugal",
-      coords: "38.7223 N, 9.1393 W",
-      note: "Maya's tasca where the owner chooses your dinner",
-      image: "dest-lisbon.jpg",
-      alt: "Steep Lisbon street with tiled facades and a yellow tram in the distance",
+      place: "Bangkok",
+      region: "Thailand",
+      note: "Sam, a print stall deep in the market",
+      image: "bangkok-popart-market.jpg",
+      alt: "A market stall with a wall of brightly coloured pop-art prints",
+      position: "42% 50%",
+      arc: "88px",
     },
     {
-      name: "Oaxaca",
-      country: "Mexico",
-      coords: "17.0732 N, 96.7266 W",
-      note: "Sam's road-trip notes from the valley palenques",
-      image: "dest-oaxaca.jpg",
-      alt: "Agave fields under a dramatic sky outside Oaxaca, mountains behind",
+      place: "Bangkok",
+      region: "Thailand",
+      note: "Maya, painted shutters on a side street",
+      image: "bangkok-striped-wall.jpg",
+      alt: "A shopfront painted in orange and white checks and stripes beside a blue shutter",
+      position: "80% 58%",
+      arc: "88px",
+    },
+    {
+      place: "New York",
+      region: "USA",
+      note: "Jonah, the corner shop that never closes",
+      image: "nyc-bodega.jpg",
+      alt: "The counter of a densely stocked corner shop, shelves crowded to the ceiling",
+      position: "44% 44%",
+      arc: "52px",
+    },
+    {
+      place: "New York",
+      region: "USA",
+      note: "Priya, the green wall on the walk to lunch",
+      image: "nyc-graffiti-wall.jpg",
+      alt: "A green wall covered in white graffiti tags and pasted posters",
+      position: "60% 62%",
+      arc: "0px",
+    },
+  ],
+};
+
+export const askTheHub = {
+  kicker: "Ask the hub",
+  headline: "Ask your circle. Get real answers.",
+  body: "Post a question to the people in your network. The ones who have been there answer, and every answer carries a name and a photograph. No sponsored listings. No ranked results. Nobody you have never met.",
+  questionLabel: "Asked in the hub",
+  question: "Two days in Delhi. Where do I actually eat?",
+  answers: [
+    {
+      image: "food-thali.jpg",
+      alt: "An overhead spread of curries, rice, naan and pickles in wooden bowls",
+      who: "Priya N.",
+      body: "Dal and paneer at the place with no sign, two streets back from the main road. Order the naan last so it arrives hot.",
+    },
+    {
+      image: "food-biryani.jpg",
+      alt: "A dark plate of biryani with naan, a copper bowl of curry and whole spices",
+      who: "Jonah R.",
+      body: "Biryani at lunch, never dinner. It sells out by two and the afternoon batch is not the same thing.",
+    },
+    {
+      image: "food-rasmalai.jpg",
+      alt: "Rasmalai in a steel dish, saffron and pistachio scattered over cream",
+      who: "Maya T.",
+      body: "Skip dessert where you eat. Walk to the sweet shop on the corner and have rasmalai cold, standing up.",
     },
   ],
 };

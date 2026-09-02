@@ -7,29 +7,30 @@ import Image from "next/image";
  * the branded placeholder (teal gradient with grain) when it does not, so
  * the site never looks broken while imagery is being produced.
  *
- * Slots, prompts, aspect ratios, and filenames are documented in
- * IMAGERY.md. Dropping a correctly named file into public/images is the
- * whole deployment; no code changes.
+ * Every slot is documented in IMAGERY.md. Dropping a correctly named file
+ * into public/images is the whole deployment; no code changes.
  *
  * Renders edge to edge inside a `relative` parent that owns the aspect
  * ratio and rounding.
+ *
+ * `position` is a CSS object-position value. The photographs here are real
+ * travel shots at their own crops, so each slot names the part of the frame
+ * that must survive being cropped. Tune this rather than re-exporting files.
  */
 export function Photo({
   file,
   alt,
   sizes,
   priority = false,
+  position,
 }: {
   file: string;
   alt: string;
   sizes?: string;
   priority?: boolean;
+  position?: string;
 }) {
-  const exists = fs.existsSync(
-    path.join(process.cwd(), "public", "images", file)
-  );
-
-  if (!exists) {
+  if (!hasFile(file)) {
     return (
       <div
         role="img"
@@ -47,6 +48,36 @@ export function Photo({
       sizes={sizes}
       priority={priority}
       className="object-cover"
+      style={position ? { objectPosition: position } : undefined}
     />
   );
+}
+
+/**
+ * The blurred, enlarged copy of a photograph that sits behind the hero's
+ * inset frame, so the page bleeds the hero's own colour to the window edge
+ * instead of a flat band. Decorative: never announced to screen readers.
+ *
+ * Absent file means no backdrop at all. The hero's night ground shows
+ * through, which is the correct fallback.
+ */
+export function PhotoBackdrop({ file }: { file: string }) {
+  if (!hasFile(file)) return null;
+
+  return (
+    <div aria-hidden="true" className="hero-backdrop">
+      <Image
+        src={`/images/${file}`}
+        alt=""
+        fill
+        sizes="100vw"
+        priority
+        className="object-cover"
+      />
+    </div>
+  );
+}
+
+function hasFile(file: string) {
+  return fs.existsSync(path.join(process.cwd(), "public", "images", file));
 }
