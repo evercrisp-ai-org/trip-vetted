@@ -39,6 +39,8 @@
   /* Type */
   --font-display: var(--font-outfit), "Avenir Next", "Segoe UI", sans-serif;
   --font-sans: var(--font-inter), "Helvetica Neue", Arial, sans-serif;
+  /* Editorial serif, marketing headlines only (see ADR 0008). */
+  --font-serif: var(--font-newsreader), "Iowan Old Style", Georgia, serif;
   /* Monospace is reserved for stamp dates, coordinates, and invite codes:
      places where fixed-width digits do real work. Nowhere else. */
   --font-mono: var(--font-plex-mono), "SF Mono", Menlo, monospace;
@@ -122,3 +124,51 @@ body {
     transform: translateY(var(--arc));
   }
 }
+
+/* ── Theme scopes ─────────────────────────────────────────────────────
+   The tokens above are the light theme the app runs on. The marketing
+   site runs dark (ADR 0008), and a stamp specimen inside it is paper.
+   Both are done by re-pointing the same variables on a wrapper, so no
+   component knows which theme it is in. Every pair below was measured:
+   ink 16.9:1, ink-soft 10.4:1, ink-faint 6.7:1, accent 8.7:1 on ground. */
+.theme-night {
+  --color-ground: #0a161c;
+  --color-surface: #10222b;
+  --color-surface-sunk: #0c1a21;
+  --color-line: #1e333d;
+  --color-line-strong: #3a5563;
+  --color-ink: #f4f6f7;
+  --color-ink-soft: #b7c5cc;
+  --color-ink-faint: #8aa0aa;
+  --color-accent: #5cc0d3;
+  --color-ok: #7fd4a6;
+  --color-error: #ff9e96;
+  background: var(--color-ground);
+  color: var(--color-ink);
+  color-scheme: dark;
+}
+.theme-night :focus-visible {
+  outline-color: #ffffff;
+}
+.theme-paper {
+  --color-ground: #f4f6f7;
+  --color-surface: #ffffff;
+  --color-surface-sunk: #e7edf0;
+  --color-line: #d5dde1;
+  --color-line-strong: #9dabb3;
+  --color-ink: #0e171c;
+  --color-ink-soft: #3f5059;
+  --color-ink-faint: #52626b;
+  --color-accent: #0b6c80;
+  --color-ok: #156d45;
+  --color-error: #b3261e;
+  color: var(--color-ink);
+  color-scheme: light;
+}
+
+/* Tinted tiles (the 2x2 in Privacy). White on the light end of each
+   gradient: teal 8.9:1, slate 11.5:1, plum 12.4:1, sage 9.9:1. */
+.tile-teal  { background: linear-gradient(135deg, #17505e 0%, #0c303a 100%); }
+.tile-slate { background: linear-gradient(135deg, #2a3b4b 0%, #16222d 100%); }
+.tile-plum  { background: linear-gradient(135deg, #3b2f4d 0%, #221a2e 100%); }
+.tile-sage  { background: linear-gradient(135deg, #234a3d 0%, #132a22 100%); }

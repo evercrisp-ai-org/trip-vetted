@@ -119,10 +119,12 @@ export const heroStream = {
 };
 
 export const circle = {
-  image: "nyc-umbrellas.jpg",
+  /* Two frames, stacked and tilted, like prints on a desk. */
+  images: [
+    { file: "nyc-umbrellas.jpg", alt: "A crowd crossing a rainy city street under black umbrellas", position: "50% 45%" },
+    { file: "nyc-graffiti-wall.jpg", alt: "A green wall covered in white graffiti tags and pasted posters", position: "60% 60%" },
+  ],
   kicker: "Your travel circle",
-  imageAlt:
-    "A crowd crossing a rainy city street under black umbrellas",
   headline: "Five friends who travel well beat five thousand reviews.",
   body: "You already trust certain people about where to eat and where to stay. Trip Vetted makes that trust usable. Your circle is built one invitation at a time, and you can always see who brought anyone in. If a tip shows up in your plans, you know exactly whose taste it reflects.",
   points: [
@@ -285,29 +287,49 @@ export const askTheHub = {
 export const privacy = {
   kicker: "Privacy and trust",
   headline: "Built private, because it has to be.",
-  points: [
+  /*
+   * Four tinted tiles. `tone` picks the gradient (.tile-* in globals.css),
+   * `pill` is the short status line, and the link is a real anchor: rule 10,
+   * no dead UI, so every tile points at something that exists.
+   */
+  tiles: [
     {
+      tone: "teal",
+      pill: "Enforced in the database",
       title: "Your email is never shown",
-      body: "Not to members, not on profiles, not anywhere. This is enforced in the database itself, not just hidden in the interface.",
+      body: "Not to members, not on profiles, not anywhere. The database itself refuses to hand it over, so no interface change could leak it.",
+      linkLabel: "How the chain works",
+      href: "#how-it-works",
     },
     {
+      tone: "slate",
+      pill: "Per stamp, your call",
       title: "You control every stamp",
-      body: "Each stamp is private, visible to your circle, or visible to the community. You decide per stamp, and you can change your mind.",
+      body: "Each stamp is private, visible to your circle, or visible to the community. You decide one at a time, and you can change your mind.",
+      linkLabel: "See a stamp",
+      href: "#stamps",
     },
     {
+      tone: "plum",
+      pill: "Visible to members",
       title: "The chain is public inside the walls",
-      body: "Who invited whom is visible to members. That is the point: accountability is what makes the advice worth taking.",
+      body: "Who invited whom is on every profile. That is the point: accountability is what makes the advice worth taking.",
+      linkLabel: "I have an invite",
+      href: "/join",
     },
     {
-      title: "No ads, no data resale",
-      body: "The product is the network, not your attention. Nothing here is sold to anyone.",
+      tone: "sage",
+      pill: "No ads, ever",
+      title: "Nothing here is for sale",
+      body: "The product is the network, not your attention. No advertising, no data resale, no sponsored stamps.",
+      linkLabel: "Join the waitlist",
+      href: "#waitlist",
     },
   ],
 };
 
 export const waitlist = {
   headline: "No invite yet?",
-  imageAlt: "A dark coastline at night with a lighthouse beam over the water",
   body: "Leave your email. When your corner of the network opens up, or a member vouches for you, this is how we reach you.",
   placeholder: "you@example.com",
   button: "Join the waitlist",
@@ -317,13 +339,30 @@ export const waitlist = {
 };
 
 export const footer = {
+  /* The footer opens with the waitlist (copy in `waitlist` above) beside a
+     stacked photograph, then the link columns. Links are real anchors only. */
+  ctaImage: "yokohama-chinatown.jpg",
+  ctaImageAlt: "A Chinatown street at night strung with red paper lanterns",
   blurb: "An invite-only travel network. Every recommendation signed by someone you know.",
-  colProduct: "Product",
-  colTrust: "Trust",
-  linkHowItWorks: "How it works",
-  linkStamps: "Stamps and briefs",
-  linkPrivacy: "Privacy",
-  linkSignIn: "Member sign in",
+  columns: [
+    {
+      title: "Product",
+      links: [
+        { label: "How it works", href: "#how-it-works" },
+        { label: "Stamps and briefs", href: "#stamps" },
+        { label: "Ask the hub", href: "#hub" },
+        { label: "Privacy", href: "#privacy" },
+      ],
+    },
+    {
+      title: "Members",
+      links: [
+        { label: "Member sign in", href: "/login" },
+        { label: "I have an invite", href: "/join" },
+        { label: "Join the waitlist", href: "#waitlist" },
+      ],
+    },
+  ],
   fineprint: "Members join by invitation. The waitlist is the queue for the door.",
 };
 

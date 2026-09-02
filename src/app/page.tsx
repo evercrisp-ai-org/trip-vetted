@@ -6,17 +6,17 @@ import {
   StampsAndBriefs,
   AskTheHub,
   Privacy,
-  Waitlist,
   SiteFooter,
 } from "@/features/marketing/sections";
 
 /*
- * The front door. The nav lives inside the hero frame, so it is rendered by
- * <Hero /> rather than here.
+ * The front door. Runs on the dark theme scope (ADR 0008); the app pages do
+ * not. The nav lives inside the hero frame, so <Hero /> renders it. The
+ * waitlist is the top of the footer.
  */
 export default function MarketingPage() {
   return (
-    <>
+    <div className="theme-night">
       <main id="content">
         <Hero />
         <Circle />
@@ -25,9 +25,8 @@ export default function MarketingPage() {
         <StampsAndBriefs />
         <AskTheHub />
         <Privacy />
-        <Waitlist />
       </main>
       <SiteFooter />
-    </>
+    </div>
   );
 }

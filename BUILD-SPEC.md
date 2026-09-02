@@ -115,7 +115,10 @@ logged-in app (feed, stamps, briefs, hub) is quieter, denser, and content-first.
 weekly has different needs than a page seen once, and the app must never depend on a perfect
 hero photograph, because its real content is members' phone photos.
 
-**Structure.** Dark cinematic photographic hero, then a light ground for everything below
+**Structure.** Revised again 2026-09-02 (ADR 0008): the marketing site is dark throughout,
+with an editorial serif for headlines, and it does not use card grids. The earlier "light
+ground below the hero" direction is withdrawn. The original pattern note follows for history.
+Dark cinematic photographic hero, then a light ground for everything below
 (the tourex and Malvora pattern). Glass nav floating over the hero. Generous rounded corners.
 Horizontal card rails for grouped content. Soft depth, cards may overlap section boundaries.
 

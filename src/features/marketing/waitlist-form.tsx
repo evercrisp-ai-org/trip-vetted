@@ -6,7 +6,7 @@ import { waitlist } from "@/content/site";
 
 const initial: WaitlistState = { status: "idle", message: "" };
 
-/** Lives inside the dark waitlist band; styled for a night ground. */
+/** Lives at the top of the footer; every colour is a token, so it follows the theme scope. */
 export function WaitlistForm() {
   const [state, action, pending] = useActionState(joinWaitlist, initial);
 
@@ -33,12 +33,12 @@ export function WaitlistForm() {
         required
         autoComplete="email"
         placeholder={waitlist.placeholder}
-        className="w-full rounded-full border border-line-strong bg-surface px-5 py-3.5 text-sm text-ink placeholder:text-ink-faint"
+        className="w-full rounded-full border border-line-strong bg-surface px-5 py-3.5 text-sm text-ink placeholder:text-ink-faint focus:border-accent"
       />
       <button
         type="submit"
         disabled={pending}
-        className="shrink-0 rounded-full bg-accent px-7 py-3.5 text-sm font-semibold text-white hover:bg-accent-deep disabled:opacity-60"
+        className="shrink-0 rounded-full bg-white px-7 py-3.5 text-sm font-semibold text-night hover:bg-accent-wash disabled:opacity-60"
       >
         {pending ? "…" : waitlist.button}
       </button>

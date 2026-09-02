@@ -41,6 +41,43 @@ function Kicker({ children }: { children: React.ReactNode }) {
   );
 }
 
+/** Section headline. Serif, light weight: the editorial voice of the page. */
+function Headline({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <h2
+      className={
+        "mt-4 text-balance font-serif text-4xl font-normal leading-[1.05] tracking-tight text-ink sm:text-5xl " +
+        (className ?? "")
+      }
+    >
+      {children}
+    </h2>
+  );
+}
+
+function Arrow() {
+  return (
+    <svg
+      viewBox="0 0 20 20"
+      aria-hidden="true"
+      className="h-4 w-4 transition-transform group-hover:translate-x-1"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M4 10h12M11 5l5 5-5 5" />
+    </svg>
+  );
+}
+
 /**
  * The nav pill. Rendered inside the hero frame rather than over the page,
  * so it sits on the photograph the way the reference layout does.
@@ -163,7 +200,7 @@ export function Hero() {
             <p className="inline-flex items-center rounded-full border border-white/40 bg-night/40 px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.25em] text-white backdrop-blur-sm">
               {heroStream.kicker}
             </p>
-            <h1 className="mt-6 text-balance font-display text-4xl font-semibold leading-[1.04] tracking-tight text-white sm:text-5xl lg:text-6xl">
+            <h1 className="mt-6 text-balance font-serif text-5xl font-normal leading-[1.02] tracking-tight text-white sm:text-6xl lg:text-7xl">
               {heroStream.headline}
             </h1>
           </div>
@@ -194,17 +231,26 @@ export function Hero() {
 }
 
 export function Circle() {
+  const [front, back] = circle.images;
   return (
-    <section className="relative">
-      <div className="mx-auto max-w-6xl px-4 pt-14 sm:px-6 sm:pt-20">
-        <dl className="relative z-10 grid gap-4 sm:grid-cols-3">
+    <section className="mx-auto grid max-w-6xl gap-14 px-4 py-20 sm:px-6 sm:py-28 lg:grid-cols-[1.1fr_1fr] lg:items-center lg:gap-20">
+      <div>
+        <Kicker>{circle.kicker}</Kicker>
+        <Headline>{circle.headline}</Headline>
+        <p className="mt-6 max-w-xl text-lg leading-relaxed text-ink-soft">
+          {circle.body}
+        </p>
+        {/* Three points as a ruled list, not three cards. */}
+        <dl className="mt-10 divide-y divide-line border-y border-line">
           {circle.points.map((p) => (
             <div
               key={p.title}
-              className="rounded-2xl bg-surface p-6 shadow-sm"
+              className="grid gap-2 py-5 sm:grid-cols-[minmax(0,14rem)_1fr] sm:gap-8"
             >
-              <dt className="font-display text-lg font-semibold">{p.title}</dt>
-              <dd className="mt-2 text-sm leading-relaxed text-ink-soft">
+              <dt className="font-display text-base font-semibold text-ink">
+                {p.title}
+              </dt>
+              <dd className="text-sm leading-relaxed text-ink-soft">
                 {p.body}
               </dd>
             </div>
@@ -212,22 +258,22 @@ export function Circle() {
         </dl>
       </div>
 
-      <div className="mx-auto grid max-w-6xl gap-10 px-4 py-16 sm:px-6 sm:py-24 lg:grid-cols-2 lg:items-center">
-        <div>
-          <Kicker>{circle.kicker}</Kicker>
-          <h2 className="mt-4 max-w-xl font-display text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">
-            {circle.headline}
-          </h2>
-          <p className="mt-5 max-w-xl leading-relaxed text-ink-soft">
-            {circle.body}
-          </p>
-        </div>
-        <div className="relative aspect-[4/3] overflow-hidden rounded-3xl bg-night">
+      {/* Two prints on a desk: the back one tilted, the front one square. */}
+      <div className="relative mx-auto aspect-[4/3] w-full max-w-lg lg:max-w-none">
+        <div className="absolute inset-0 -rotate-3 translate-x-3 translate-y-3 overflow-hidden rounded-3xl bg-night opacity-90 shadow-2xl shadow-black/40">
           <Photo
-            file={circle.image}
-            alt={circle.imageAlt}
-            sizes="(min-width: 1024px) 50vw, 100vw"
-            position="50% 45%"
+            file={back.file}
+            alt={back.alt}
+            sizes="(min-width: 1024px) 45vw, 100vw"
+            position={back.position}
+          />
+        </div>
+        <div className="absolute inset-0 overflow-hidden rounded-3xl bg-night shadow-2xl shadow-black/50 outline outline-1 outline-white/10">
+          <Photo
+            file={front.file}
+            alt={front.alt}
+            sizes="(min-width: 1024px) 45vw, 100vw"
+            position={front.position}
           />
         </div>
       </div>
@@ -237,28 +283,33 @@ export function Circle() {
 
 export function HowItWorks() {
   return (
-    <section id="how-it-works" className="bg-surface-sunk/60">
-      <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-24">
-        <Kicker>{howItWorks.kicker}</Kicker>
-        <h2 className="mt-4 font-display text-3xl font-semibold tracking-tight sm:text-4xl">
-          {howItWorks.headline}
-        </h2>
-        <ol className="rail mt-10 flex snap-x gap-4 overflow-x-auto pb-2 lg:grid lg:grid-cols-3 lg:overflow-visible">
+    <section id="how-it-works" className="border-y border-line bg-surface-sunk/60">
+      <div className="mx-auto grid max-w-6xl gap-12 px-4 py-20 sm:px-6 sm:py-28 lg:grid-cols-[1fr_1.4fr] lg:gap-20">
+        <div className="lg:sticky lg:top-24 lg:self-start">
+          <Kicker>{howItWorks.kicker}</Kicker>
+          <Headline>{howItWorks.headline}</Headline>
+        </div>
+        {/* Numbered rows with hairlines. Reads as one sequence, not a grid. */}
+        <ol className="divide-y divide-line">
           {howItWorks.steps.map((step, i) => (
             <li
               key={step.name}
-              className="min-w-[80%] rounded-2xl bg-surface p-7 shadow-sm sm:min-w-[55%] lg:min-w-0"
+              className="grid gap-4 py-8 first:pt-0 last:pb-0 sm:grid-cols-[5rem_1fr] sm:gap-8"
             >
-              <p className="font-display text-4xl font-semibold text-accent">
+              <p className="font-serif text-5xl leading-none text-accent">
                 {String(i + 1).padStart(2, "0")}
               </p>
-              <p className="mt-4 text-xs font-semibold uppercase tracking-[0.25em] text-ink-faint">
-                {step.name}
-              </p>
-              <h3 className="mt-2 font-display text-xl font-semibold">
-                {step.title}
-              </h3>
-              <p className="mt-2 leading-relaxed text-ink-soft">{step.body}</p>
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.25em] text-ink-faint">
+                  {step.name}
+                </p>
+                <h3 className="mt-2 font-display text-2xl font-semibold text-ink">
+                  {step.title}
+                </h3>
+                <p className="mt-3 max-w-xl leading-relaxed text-ink-soft">
+                  {step.body}
+                </p>
+              </div>
             </li>
           ))}
         </ol>
@@ -268,31 +319,28 @@ export function HowItWorks() {
 }
 
 /**
- * The arc row. A line of stamps that steps down toward the middle and back
- * up, so the photographs read as one curve rather than a grid. Below lg the
- * arc flattens into a horizontal rail (see .arc in globals.css).
+ * The arc row: six stamps stepping down toward the middle and back up, so
+ * the photographs read as one curve. Below lg it flattens to a rail.
  */
 export function StampArc() {
   return (
     <section aria-label={stampArc.railLabel} className="overflow-hidden">
-      <div className="mx-auto max-w-3xl px-4 pt-16 text-center sm:px-6 sm:pt-24">
+      <div className="mx-auto max-w-3xl px-4 pt-20 text-center sm:px-6 sm:pt-28">
         <Kicker>{stampArc.kicker}</Kicker>
-        <h2 className="mt-4 font-display text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">
-          {stampArc.headline}
-        </h2>
-        <p className="mx-auto mt-4 max-w-xl leading-relaxed text-ink-soft">
+        <Headline>{stampArc.headline}</Headline>
+        <p className="mx-auto mt-5 max-w-xl leading-relaxed text-ink-soft">
           {stampArc.sub}
         </p>
       </div>
 
-      <ul className="arc rail mx-auto flex max-w-6xl snap-x gap-4 overflow-x-auto px-4 pb-16 pt-12 sm:gap-5 sm:px-6 lg:justify-center lg:overflow-visible lg:pb-44 lg:pt-16">
+      <ul className="arc rail mx-auto flex max-w-6xl snap-x gap-4 overflow-x-auto px-4 pb-20 pt-12 sm:gap-5 sm:px-6 lg:justify-center lg:overflow-visible lg:pb-48 lg:pt-16">
         {stampArc.items.map((item) => (
           <li
             key={item.image}
             style={{ "--arc": item.arc } as CSSProperties}
             className="w-[44vw] max-w-[190px] shrink-0 sm:w-[170px] lg:w-[156px]"
           >
-            <div className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-night shadow-lg shadow-night/15">
+            <div className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-night shadow-xl shadow-black/40 outline outline-1 outline-white/10">
               <Photo
                 file={item.image}
                 alt={item.alt}
@@ -300,7 +348,7 @@ export function StampArc() {
                 position={item.position}
               />
             </div>
-            <p className="mt-3 font-display text-sm font-semibold">
+            <p className="mt-3 font-display text-sm font-semibold text-ink">
               {item.place}
               <span className="font-sans font-normal text-ink-faint">
                 {", "}
@@ -319,17 +367,15 @@ export function StampArc() {
 
 export function StampsAndBriefs() {
   return (
-    <section id="stamps" className="bg-surface-sunk/60">
-      <div className="mx-auto grid max-w-6xl gap-12 px-4 py-16 sm:px-6 sm:py-24 lg:grid-cols-2 lg:items-center">
+    <section id="stamps" className="border-y border-line bg-surface-sunk/60">
+      <div className="mx-auto grid max-w-6xl gap-14 px-4 py-20 sm:px-6 sm:py-28 lg:grid-cols-2 lg:items-center lg:gap-20">
         <div>
           <Kicker>{stampsAndBriefs.kicker}</Kicker>
-          <h2 className="mt-4 font-display text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">
-            {stampsAndBriefs.headline}
-          </h2>
-          <p className="mt-5 leading-relaxed text-ink-soft">
+          <Headline>{stampsAndBriefs.headline}</Headline>
+          <p className="mt-6 text-lg leading-relaxed text-ink-soft">
             {stampsAndBriefs.body}
           </p>
-          <p className="mt-6 rounded-2xl bg-accent-wash p-5 text-sm font-medium leading-relaxed text-accent-deep">
+          <p className="mt-8 border-l-2 border-accent pl-5 text-sm leading-relaxed text-ink">
             {stampsAndBriefs.briefNote}
           </p>
         </div>
@@ -337,116 +383,9 @@ export function StampsAndBriefs() {
           <p className="mb-4 text-center text-xs font-semibold uppercase tracking-[0.25em] text-ink-faint lg:hidden">
             {stampsAndBriefs.stampCardLabel}
           </p>
-          <StampSpecimen rotate="rotate-1" />
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/**
- * Ask the hub, shown as one question and the answers it got back. Every
- * answer carries a name, because attribution is the product.
- */
-export function AskTheHub() {
-  return (
-    <section id="hub">
-      <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-24">
-        <div className="max-w-2xl">
-          <Kicker>{askTheHub.kicker}</Kicker>
-          <h2 className="mt-4 font-display text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">
-            {askTheHub.headline}
-          </h2>
-          <p className="mt-5 leading-relaxed text-ink-soft">{askTheHub.body}</p>
-        </div>
-
-        <figure className="mt-12">
-          <figcaption className="rounded-2xl border border-line bg-surface p-6 sm:max-w-xl">
-            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-ink-faint">
-              {askTheHub.questionLabel}
-            </p>
-            <p className="mt-2 font-display text-xl font-semibold leading-snug sm:text-2xl">
-              {askTheHub.question}
-            </p>
-          </figcaption>
-
-          <ul className="mt-6 grid gap-4 sm:grid-cols-3">
-            {askTheHub.answers.map((answer) => (
-              <li
-                key={answer.image}
-                className="overflow-hidden rounded-2xl bg-surface shadow-sm"
-              >
-                <div className="relative aspect-[4/5] bg-night">
-                  <Photo
-                    file={answer.image}
-                    alt={answer.alt}
-                    sizes="(min-width: 640px) 22rem, 100vw"
-                  />
-                </div>
-                <div className="p-5">
-                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">
-                    {answer.who}
-                  </p>
-                  <p className="mt-2 text-sm leading-relaxed text-ink-soft">
-                    {answer.body}
-                  </p>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </figure>
-      </div>
-    </section>
-  );
-}
-
-export function Privacy() {
-  return (
-    <section id="privacy" className="bg-surface-sunk/60">
-      <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-24">
-        <Kicker>{privacy.kicker}</Kicker>
-        <h2 className="mt-4 font-display text-3xl font-semibold tracking-tight sm:text-4xl">
-          {privacy.headline}
-        </h2>
-        <dl className="mt-10 grid gap-4 sm:grid-cols-2">
-          {privacy.points.map((p) => (
-            <div
-              key={p.title}
-              className="rounded-2xl border border-line bg-surface p-6"
-            >
-              <dt className="font-display text-lg font-semibold">{p.title}</dt>
-              <dd className="mt-2 text-sm leading-relaxed text-ink-soft">
-                {p.body}
-              </dd>
-            </div>
-          ))}
-        </dl>
-      </div>
-    </section>
-  );
-}
-
-/**
- * The waitlist band. Deliberately not photographic: every photograph on this
- * page belongs to a member's stamp, and a decorative one here would dilute
- * that. White on --color-accent is 6.05:1, so no scrim is needed.
- */
-export function Waitlist() {
-  return (
-    <section
-      id="waitlist"
-      className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-24"
-    >
-      <div className="on-night relative overflow-hidden rounded-3xl bg-gradient-to-br from-accent via-accent-deep to-night">
-        <div className="relative px-6 py-14 sm:px-12 sm:py-16">
-          <h2 className="max-w-xl font-display text-3xl font-semibold tracking-tight text-white sm:text-4xl">
-            {waitlist.headline}
-          </h2>
-          <p className="mt-4 max-w-xl leading-relaxed text-white">
-            {waitlist.body}
-          </p>
-          <div className="mt-8 max-w-xl">
-            <WaitlistForm />
+          {/* A stamp is paper. It keeps the light tokens inside a dark page. */}
+          <div className="theme-paper">
+            <StampSpecimen rotate="-rotate-2" />
           </div>
         </div>
       </div>
@@ -454,12 +393,172 @@ export function Waitlist() {
   );
 }
 
+/*
+ * The fan. Three cards, the outer two tilted and tucked behind the middle
+ * one, like photographs dropped on a table. The geometry is the reference
+ * layout Dave supplied (38 / 42 / 38 widths, 6 degree tilt, negative
+ * margins for the overlap). CSS only; no animation library.
+ */
+const FAN = [
+  // `caption` pads the side tucked under the middle card, so no text runs
+  // beneath the overlap.
+  { width: "w-[38%]", layout: "-mr-8 z-10 -rotate-6 translate-y-6", caption: "pr-12 sm:pr-16" },
+  { width: "w-[42%]", layout: "z-20 -translate-y-2", caption: "" },
+  { width: "w-[38%]", layout: "-ml-8 z-10 rotate-6 translate-y-6", caption: "pl-12 sm:pl-16" },
+] as const;
+
+export function AskTheHub() {
+  return (
+    <section id="hub" className="overflow-hidden">
+      <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28">
+        <div className="mx-auto max-w-2xl text-center">
+          <Kicker>{askTheHub.kicker}</Kicker>
+          <Headline>{askTheHub.headline}</Headline>
+          <p className="mt-6 text-lg leading-relaxed text-ink-soft">
+            {askTheHub.body}
+          </p>
+        </div>
+
+        <figure className="mt-14">
+          <figcaption className="mx-auto max-w-xl text-center">
+            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-ink-faint">
+              {askTheHub.questionLabel}
+            </p>
+            <p className="mt-3 font-serif text-3xl leading-snug text-ink sm:text-4xl">
+              {askTheHub.question}
+            </p>
+          </figcaption>
+
+          <div className="mx-auto mt-12 flex w-full max-w-3xl items-center justify-center">
+            {askTheHub.answers.slice(0, 3).map((answer, i) => {
+              const slot = FAN[i];
+              return (
+                <div
+                  key={answer.image}
+                  className={
+                    "relative aspect-[4/5] shrink-0 overflow-hidden rounded-2xl bg-night shadow-2xl shadow-black/50 outline outline-1 outline-white/10 " +
+                    slot.width +
+                    " " +
+                    slot.layout
+                  }
+                >
+                  <Photo
+                    file={answer.image}
+                    alt={answer.alt}
+                    sizes="(min-width: 768px) 20rem, 40vw"
+                  />
+                  {/* Caption floor night/90 at the base: white 15:1 worst case. */}
+                  <div
+                    aria-hidden="true"
+                    className="absolute inset-x-0 bottom-0 h-3/5 bg-gradient-to-t from-night/95 via-night/70 to-transparent"
+                  />
+                  <div
+                    className={
+                      "absolute inset-x-0 bottom-0 p-4 text-white sm:p-5 " +
+                      slot.caption
+                    }
+                  >
+                    <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-accent-wash sm:text-xs">
+                      {answer.who}
+                    </p>
+                    <p className="mt-1.5 hidden text-xs leading-snug sm:block sm:text-sm">
+                      {answer.body}
+                    </p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </figure>
+      </div>
+    </section>
+  );
+}
+
+/**
+ * Four tinted tiles, the reference 2x2: status pill, big title, body, arrow
+ * link. Each gradient was measured for white text at its light end.
+ */
+export function Privacy() {
+  return (
+    <section id="privacy" className="border-t border-line">
+      <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28">
+        <div className="max-w-2xl">
+          <Kicker>{privacy.kicker}</Kicker>
+          <Headline>{privacy.headline}</Headline>
+        </div>
+        <ul className="mt-12 grid gap-5 sm:grid-cols-2">
+          {privacy.tiles.map((t) => (
+            <li
+              key={t.title}
+              className={`tile-${t.tone} relative flex min-h-[19rem] flex-col rounded-[1.75rem] p-7 text-white sm:p-9`}
+            >
+              <p className="inline-flex w-fit items-center gap-2 rounded-full bg-night/40 px-3.5 py-1.5 text-xs font-medium text-white backdrop-blur-sm">
+                <span
+                  aria-hidden="true"
+                  className="h-1.5 w-1.5 rounded-full bg-accent-wash"
+                />
+                {t.pill}
+              </p>
+              <h3 className="mt-6 font-display text-2xl font-semibold leading-tight sm:text-3xl">
+                {t.title}
+              </h3>
+              <p className="mt-3 max-w-md leading-relaxed text-white/85">
+                {t.body}
+              </p>
+              <Link
+                href={t.href}
+                className="group mt-auto inline-flex items-center gap-2 pt-8 text-sm font-semibold text-white"
+              >
+                {t.linkLabel}
+                <Arrow />
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  );
+}
+
+/**
+ * The footer opens with the waitlist, beside a stacked photograph, then the
+ * link columns. It replaces the separate waitlist band, so the page ends on
+ * one composed piece rather than two stacked boxes.
+ */
 export function SiteFooter() {
   return (
-    <footer className="border-t border-line bg-surface">
-      <div className="mx-auto grid max-w-6xl gap-10 px-4 py-12 sm:grid-cols-[2fr_1fr_1fr] sm:px-6">
+    <footer id="waitlist" className="border-t border-line">
+      <div className="mx-auto grid max-w-6xl items-center gap-14 px-4 pb-16 pt-20 sm:px-6 sm:pt-28 lg:grid-cols-[1.2fr_1fr] lg:gap-20">
         <div>
-          <p className="font-display text-xl font-semibold">{site.name}</p>
+          <Headline className="!mt-0">{waitlist.headline}</Headline>
+          <p className="mt-5 max-w-xl text-lg leading-relaxed text-ink-soft">
+            {waitlist.body}
+          </p>
+          <div className="mt-8 max-w-xl">
+            <WaitlistForm />
+          </div>
+        </div>
+        {/* One frame, with a tilted ghost behind it. */}
+        <div className="relative mx-auto aspect-[4/3] w-full max-w-md lg:max-w-none">
+          <div
+            aria-hidden="true"
+            className="absolute inset-0 -rotate-3 translate-x-2 translate-y-2 rounded-3xl bg-surface"
+          />
+          <div className="absolute inset-0 overflow-hidden rounded-3xl bg-night shadow-2xl shadow-black/50 outline outline-1 outline-white/10">
+            <Photo
+              file={footer.ctaImage}
+              alt={footer.ctaImageAlt}
+              sizes="(min-width: 1024px) 40vw, 100vw"
+              position="50% 45%"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div className="mx-auto grid max-w-6xl gap-10 px-4 pb-14 pt-8 sm:grid-cols-[1.4fr_1fr_1fr] sm:px-6 lg:gap-16">
+        <div>
+          <p className="font-display text-xl font-semibold text-ink">{site.name}</p>
           <p className="mt-1 text-xs font-semibold uppercase tracking-[0.2em] text-accent">
             {site.tagline}
           </p>
@@ -467,43 +566,25 @@ export function SiteFooter() {
             {footer.blurb}
           </p>
         </div>
-        <nav aria-label="Product">
-          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-ink-faint">
-            {footer.colProduct}
-          </p>
-          <ul className="mt-3 space-y-2 text-sm">
-            <li>
-              <a href="#how-it-works" className="hover:text-accent">
-                {footer.linkHowItWorks}
-              </a>
-            </li>
-            <li>
-              <a href="#stamps" className="hover:text-accent">
-                {footer.linkStamps}
-              </a>
-            </li>
-          </ul>
-        </nav>
-        <nav aria-label="Trust">
-          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-ink-faint">
-            {footer.colTrust}
-          </p>
-          <ul className="mt-3 space-y-2 text-sm">
-            <li>
-              <a href="#privacy" className="hover:text-accent">
-                {footer.linkPrivacy}
-              </a>
-            </li>
-            <li>
-              <Link href="/login" className="hover:text-accent">
-                {footer.linkSignIn}
-              </Link>
-            </li>
-          </ul>
-        </nav>
+        {footer.columns.map((col) => (
+          <nav key={col.title} aria-label={col.title}>
+            <p className="font-display text-base font-semibold text-ink">
+              {col.title}
+            </p>
+            <ul className="mt-4 space-y-3 text-sm text-ink-soft">
+              {col.links.map((l) => (
+                <li key={l.href}>
+                  <Link href={l.href} className="hover:text-ink">
+                    {l.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        ))}
       </div>
       <div className="border-t border-line">
-        <p className="mx-auto max-w-6xl px-4 py-4 text-xs text-ink-faint sm:px-6">
+        <p className="mx-auto max-w-6xl px-4 py-5 text-xs text-ink-faint sm:px-6">
           {footer.fineprint}
         </p>
       </div>
