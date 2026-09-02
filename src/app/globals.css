@@ -82,9 +82,19 @@ body {
     linear-gradient(135deg, #0b6c80 0%, #123c5e 62%, #071820 100%);
 }
 
-/* Horizontal card rails */
+/* Horizontal card rails.
+   scroll-padding matters: scroll-snap-align:start snaps an item to the
+   snapport edge, which without this sits INSIDE the container padding, so
+   the first card ends up flush against the screen edge on a phone. Keep this
+   in step with the horizontal padding the rails carry. */
 .rail {
   scroll-snap-type: x mandatory;
+  scroll-padding-left: 1rem;
+}
+@media (min-width: 640px) {
+  .rail {
+    scroll-padding-left: 1.5rem;
+  }
 }
 .rail > * {
   scroll-snap-align: start;

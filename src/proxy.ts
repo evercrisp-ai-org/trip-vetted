@@ -6,7 +6,7 @@ import { NextResponse, type NextRequest } from "next/server";
  * the member-only routes. Route-level checks still exist on each page; this
  * is the outer fence, not the only one.
  */
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   let response = NextResponse.next({ request });
 
   const supabase = createServerClient(
